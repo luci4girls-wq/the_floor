@@ -1,0 +1,3552 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>THE FLOOR </title>
+<style>
+ :root {
+  --bg-deep: #040714;
+  --bg-panel: rgba(12, 20, 44, 0.88);
+  --bg-card: rgba(18, 30, 66, 0.92);
+  --neon-cyan: #00f0ff;
+  --neon-blue: #2979ff;
+  --neon-gold: #ffca28;
+  --neon-green: #00e676;
+  --neon-red: #ff1744;
+  --neon-purple: #d500f9;
+  --text-main: #f4f8ff;
+  --text-muted: #94a9c9;
+  --border-glow: rgba(0, 240, 255, 0.35);
+  --shadow-neon: 0 0 24px rgba(0, 240, 255, 0.25);
+  --grid-cols: 5;
+  --grid-rows: 2;
+ }
+
+ * {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  user-select: none;
+ }
+
+ html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+  background: radial-gradient(ellipse at 50% 0%, #102352 0%, #060b1e 55%, #02040a 100%);
+  color: var(--text-main);
+ }
+
+ body::before {
+  content: "";
+  position: fixed;
+  inset: 0;
+  background-image:
+   linear-gradient(rgba(0, 240, 255, 0.05) 1px, transparent 1px),
+   linear-gradient(90deg, rgba(0, 240, 255, 0.05) 1px, transparent 1px);
+  background-size: 64px 64px;
+  pointer-events: none;
+  z-index: 0;
+ }
+
+ body::after {
+  content: "";
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90vw;
+  height: 45vh;
+  background: radial-gradient(circle, rgba(0, 240, 255, 0.14) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+ }
+
+ #app {
+  position: relative;
+  z-index: 1;
+  width: 100vw;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+ }
+
+ /* Top TV Header Bar */
+ header.topbar {
+  height: 68px;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: rgba(5, 10, 26, 0.85);
+  border-bottom: 1px solid rgba(0, 240, 255, 0.25);
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(10px);
+  flex-shrink: 0;
+ }
+
+ .brand {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+ }
+
+ .brand-logo {
+  display: grid;
+  grid-template-columns: repeat(2, 14px);
+  grid-template-rows: repeat(2, 14px);
+  gap: 3px;
+  padding: 5px;
+  border-radius: 8px;
+  background: rgba(0, 240, 255, 0.1);
+  border: 1px solid var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.45);
+ }
+
+ .brand-logo span {
+  border-radius: 2px;
+  background: var(--neon-cyan);
+ }
+ .brand-logo span:nth-child(2) { background: var(--neon-gold); }
+ .brand-logo span:nth-child(3) { background: var(--neon-purple); }
+ .brand-logo span:nth-child(4) { background: var(--neon-green); }
+
+ .brand-title {
+  font-size: 1.52rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ffffff, var(--neon-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  text-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+ }
+
+ .brand-sub {
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 2px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(255, 202, 40, 0.15);
+  color: var(--neon-gold);
+  border: 1px solid rgba(255, 202, 40, 0.45);
+ }
+
+ .top-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+ }
+
+ .btn {
+  cursor: pointer;
+  border: none;
+  outline: none;
+  font-family: inherit;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  border-radius: 10px;
+  padding: 9px 16px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--text-main);
+ }
+
+ .btn-ghost {
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+ }
+ .btn-ghost:hover:not(:disabled) {
+  background: rgba(0, 240, 255, 0.14);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 14px rgba(0, 240, 255, 0.3);
+ }
+
+ .btn-danger {
+  background: rgba(255, 23, 68, 0.14);
+  border: 1px solid rgba(255, 23, 68, 0.45);
+  color: #ff8a9d;
+ }
+ .btn-danger:hover {
+  background: rgba(255, 23, 68, 0.28);
+  border-color: var(--neon-red);
+  color: #fff;
+  box-shadow: 0 0 16px rgba(255, 23, 68, 0.4);
+ }
+
+ .btn-primary {
+  background: linear-gradient(135deg, #00b4db 0%, #0083b0 45%, #2979ff 100%);
+  border: 1px solid var(--neon-cyan);
+  color: #fff;
+  text-transform: uppercase;
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.35);
+ }
+ .btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(0, 240, 255, 0.65);
+ }
+
+ .btn-gold {
+  background: linear-gradient(135deg, #ffb300 0%, #ff6f00 100%);
+  border: 1px solid #ffe082;
+  color: #0b0f1d;
+  font-weight: 900;
+  text-transform: uppercase;
+  box-shadow: 0 0 22px rgba(255, 193, 7, 0.4);
+ }
+ .btn-gold:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 32px rgba(255, 193, 7, 0.75);
+ }
+
+ /* Screens */
+ .screen {
+  display: none;
+  flex: 1;
+  width: 100%;
+  height: calc(100vh - 68px);
+  padding: 20px 32px;
+  overflow-y: auto;
+ }
+ .screen.active {
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.35s ease;
+ }
+
+ @keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.99); }
+  to { opacity: 1; transform: scale(1); }
+ }
+
+ /* ================= SCREEN 1: SETUP ================= */
+ .setup-wrapper {
+  max-width: 1440px;
+  width: 100%;
+  margin: auto;
+  background: var(--bg-panel);
+  border: 1px solid var(--border-glow);
+  border-radius: 22px;
+  padding: 26px 34px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.75), var(--shadow-neon);
+  backdrop-filter: blur(14px);
+ }
+
+ .setup-header {
+  text-align: center;
+  margin-bottom: 20px;
+ }
+
+ .setup-header h1 {
+  font-size: 2.1rem;
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+  color: #fff;
+  text-shadow: 0 0 22px rgba(0, 240, 255, 0.45);
+ }
+
+ .setup-header p {
+  color: var(--text-muted);
+  font-size: 1rem;
+ }
+
+ .setup-controls-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: space-between;
+  align-items: center;
+  background: rgba(6, 13, 32, 0.8);
+  padding: 15px 22px;
+  border-radius: 14px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-bottom: 20px;
+ }
+
+ .control-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+ }
+
+ .control-group label {
+  font-weight: 700;
+  color: var(--neon-cyan);
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+ }
+
+ /* Stepper cu + si - pentru jucatori */
+ .stepper-box {
+  display: inline-flex;
+  align-items: center;
+  background: #0b1636;
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  border-radius: 10px;
+  overflow: hidden;
+ }
+
+ .stepper-btn {
+  width: 38px;
+  height: 38px;
+  background: rgba(0, 240, 255, 0.12);
+  border: none;
+  color: #fff;
+  font-size: 1.3rem;
+  font-weight: 900;
+  cursor: pointer;
+  transition: all 0.18s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+ }
+
+ .stepper-btn:hover:not(:disabled) {
+  background: var(--neon-cyan);
+  color: #041029;
+ }
+
+ .stepper-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+ }
+
+ .stepper-val {
+  min-width: 115px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 0.96rem;
+  padding: 0 10px;
+  color: #fff;
+ }
+
+ select.tv-select {
+  background: #0b1636;
+  color: #fff;
+  border: 1px solid rgba(0, 240, 255, 0.45);
+  padding: 9px 14px;
+  border-radius: 8px;
+  font-size: 0.92rem;
+  font-weight: 700;
+  outline: none;
+  cursor: pointer;
+ }
+
+ .players-inputs-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 14px;
+  margin-bottom: 22px;
+ }
+
+ .player-input-card {
+  background: rgba(11, 22, 52, 0.9);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 13px 15px;
+  transition: all 0.2s ease;
+  position: relative;
+  overflow: hidden;
+ }
+
+ .player-input-card:focus-within {
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
+ }
+
+ .player-color-strip {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+ }
+
+ .player-card-label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 0.78rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.7px;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  margin-top: 4px;
+ }
+
+ .card-right-tools {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+ }
+
+ .btn-remove-player {
+  background: rgba(255, 23, 68, 0.18);
+  border: 1px solid rgba(255, 23, 68, 0.45);
+  color: #ff8a9d;
+  width: 20px;
+  height: 20px;
+  border-radius: 5px;
+  font-size: 0.75rem;
+  font-weight: 900;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  line-height: 1;
+ }
+ .btn-remove-player:hover {
+  background: var(--neon-red);
+  color: #fff;
+ }
+
+ .color-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  display: inline-block;
+ }
+
+ .player-input-card input {
+  width: 100%;
+  background: rgba(3, 8, 22, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  padding: 10px 11px;
+  color: #fff;
+  font-size: 1rem;
+  font-weight: 700;
+  outline: none;
+  user-select: text;
+ }
+
+ .player-input-card input:focus {
+  border-color: var(--neon-cyan);
+ }
+
+ /* Cardul cu PLUS pentru adaugare rapida jucator */
+ .add-player-card {
+  background: rgba(0, 240, 255, 0.05);
+  border: 2px dashed rgba(0, 240, 255, 0.45);
+  border-radius: 14px;
+  padding: 13px 15px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  min-height: 92px;
+  color: var(--neon-cyan);
+ }
+ .add-player-card:hover {
+  background: rgba(0, 240, 255, 0.14);
+  border-color: var(--neon-cyan);
+  box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
+  transform: translateY(-2px);
+ }
+ .add-player-plus {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(0, 240, 255, 0.18);
+  border: 1px solid var(--neon-cyan);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  font-weight: 900;
+ }
+ .add-player-lbl {
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+ }
+
+ .setup-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+ }
+
+ .rules-hint {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  line-height: 1.45;
+ }
+
+ .btn-start-game {
+  font-size: 1.12rem;
+  padding: 15px 36px;
+  border-radius: 12px;
+  flex-shrink: 0;
+ }
+
+ /* ================= SCREEN 2: BOARD ================= */
+ .board-layout {
+  display: grid;
+  grid-template-columns: 1fr 320px;
+  gap: 24px;
+  height: 100%;
+  align-items: stretch;
+ }
+
+ .floor-stage {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  background: rgba(7, 14, 34, 0.72);
+  border: 1px solid rgba(0, 240, 255, 0.22);
+  border-radius: 22px;
+  padding: 18px 22px;
+  box-shadow: inset 0 0 50px rgba(0, 240, 255, 0.06), 0 18px 50px rgba(0, 0, 0, 0.65);
+  min-height: 0;
+ }
+
+ .stage-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  padding: 11px 18px;
+  background: rgba(13, 25, 58, 0.9);
+  border-radius: 14px;
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  margin-bottom: 14px;
+  flex-shrink: 0;
+ }
+
+ .banner-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+ }
+
+ .pulse-beacon {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--neon-cyan);
+  box-shadow: 0 0 14px var(--neon-cyan);
+  animation: pulseBeacon 1.4s infinite;
+  flex-shrink: 0;
+ }
+
+ @keyframes pulseBeacon {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50% { transform: scale(1.35); opacity: 0.65; }
+ }
+
+ /* DYNAMIC FLOOR GRID */
+ .the-floor-grid {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(var(--grid-cols), minmax(0, 1fr));
+  grid-template-rows: repeat(var(--grid-rows), minmax(0, 1fr));
+  gap: 10px;
+  padding: 14px;
+  background: #02050e;
+  border-radius: 20px;
+  border: 2px solid rgba(0, 240, 255, 0.4);
+  box-shadow: 0 0 40px rgba(0, 240, 255, 0.18), inset 0 0 25px rgba(0, 240, 255, 0.15);
+  min-height: 360px;
+ }
+
+ .territory-tile {
+  position: relative;
+  border-radius: 13px;
+  padding: 10px 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+  transition: transform 0.2s cubic-bezier(0.2, 0.8, 0.2, 1), box-shadow 0.2s ease, border-color 0.2s ease, filter 0.2s ease;
+  border: 2.5px solid rgba(255, 255, 255, 0.28);
+  overflow: hidden;
+  box-shadow: inset 0 0 26px rgba(0, 0, 0, 0.35);
+  min-height: 0;
+ }
+
+ .territory-tile::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 20%, rgba(255, 255, 255, 0.22), transparent 68%);
+  pointer-events: none;
+ }
+
+ .territory-tile:hover {
+  transform: translateY(-3px) scale(1.015);
+  z-index: 2;
+ }
+
+ .territory-tile.selected-attacker {
+  border-color: #ffffff !important;
+  box-shadow: 0 0 28px #ffffff, inset 0 0 22px rgba(255, 255, 255, 0.45) !important;
+  transform: scale(1.02);
+  z-index: 4;
+ }
+
+ .territory-tile.same-owner-highlight {
+  border-color: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 0 14px rgba(255, 255, 255, 0.32);
+ }
+
+ .territory-tile.valid-target {
+  border-color: var(--neon-gold) !important;
+  animation: targetPulse 1.25s infinite alternate;
+  z-index: 3;
+ }
+
+ .territory-tile.dimmed {
+  filter: brightness(0.45) saturate(0.65);
+ }
+
+ .territory-tile.randomizer-flash {
+  border-color: #fff !important;
+  box-shadow: 0 0 38px var(--neon-cyan), inset 0 0 30px #fff !important;
+  transform: scale(1.03);
+  z-index: 5;
+ }
+
+ @keyframes targetPulse {
+  from {
+   box-shadow: 0 0 12px rgba(255, 202, 40, 0.55), inset 0 0 12px rgba(255, 202, 40, 0.3);
+   transform: scale(1.0);
+  }
+  to {
+   box-shadow: 0 0 28px rgba(255, 202, 40, 0.95), inset 0 0 22px rgba(255, 202, 40, 0.55);
+   transform: scale(1.02);
+  }
+ }
+
+ .tile-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+  gap: 4px;
+ }
+
+ .tile-number {
+  font-size: 0.72rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: rgba(0, 0, 0, 0.45);
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.6px;
+ }
+
+ .tile-role-badge {
+  font-size: 0.65rem;
+  font-weight: 900;
+  padding: 2px 7px;
+  border-radius: 6px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  white-space: nowrap;
+ }
+
+ .badge-attacker {
+  background: #ffffff;
+  color: #061029;
+  box-shadow: 0 0 10px #fff;
+ }
+
+ .badge-target {
+  background: var(--neon-gold);
+  color: #0a0e1a;
+  box-shadow: 0 0 10px var(--neon-gold);
+ }
+
+ .tile-center {
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  margin: auto 0;
+ }
+
+ .tile-owner-name {
+  font-size: clamp(0.92rem, 1.35vw, 1.4rem);
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 0 2px 10px rgba(0, 0, 0, 0.78);
+  letter-spacing: 0.4px;
+  word-break: break-word;
+  margin-bottom: 5px;
+ }
+
+ .tile-category {
+  display: inline-block;
+  max-width: 100%;
+  background: rgba(0, 0, 0, 0.54);
+  border: 1px solid rgba(255, 255, 255, 0.36);
+  padding: 3px 10px;
+  border-radius: 999px;
+  font-size: clamp(0.68rem, 0.88vw, 0.88rem);
+  font-weight: 800;
+  color: #fff;
+  letter-spacing: 0.3px;
+  backdrop-filter: blur(4px);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+
+ .tile-bottom {
+  display: flex;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  min-height: 14px;
+ }
+
+ .tile-hint {
+  font-size: 0.68rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.8);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+
+ /* Compact mode cand sunt multe teritorii (>20) */
+ .the-floor-grid.compact-tiles .territory-tile {
+  padding: 6px 8px;
+  border-radius: 10px;
+ }
+ .the-floor-grid.compact-tiles .tile-bottom {
+  display: none;
+ }
+ .the-floor-grid.compact-tiles .tile-owner-name {
+  font-size: clamp(0.8rem, 1.05vw, 1.08rem);
+  margin-bottom: 3px;
+ }
+ .the-floor-grid.compact-tiles .tile-category {
+  font-size: clamp(0.62rem, 0.75vw, 0.76rem);
+  padding: 2px 7px;
+ }
+
+ .stage-footer {
+  margin-top: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  color: var(--text-muted);
+  font-size: 0.86rem;
+  flex-shrink: 0;
+ }
+
+ /* Right Sidebar Leaderboard */
+ .sidebar-panel {
+  background: var(--bg-panel);
+  border: 1px solid rgba(0, 240, 255, 0.25);
+  border-radius: 22px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 18px 50px rgba(0, 0, 0, 0.65);
+  min-height: 0;
+ }
+
+ .sidebar-title {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 1.6px;
+  text-transform: uppercase;
+  color: var(--neon-cyan);
+  margin-bottom: 12px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+ }
+
+ .standings-list {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  flex: 1;
+  overflow-y: auto;
+ }
+
+ .standing-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 12px;
+  border-radius: 10px;
+  background: rgba(11, 22, 52, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.2s ease;
+  cursor: pointer;
+ }
+
+ .standing-item:hover {
+  border-color: rgba(0, 240, 255, 0.5);
+ }
+
+ .standing-item.eliminated {
+  opacity: 0.35;
+  cursor: default;
+  text-decoration: line-through;
+ }
+
+ .standing-left {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 800;
+  font-size: 0.92rem;
+ }
+
+ .standing-swatch {
+  width: 15px;
+  height: 15px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  flex-shrink: 0;
+ }
+
+ .standing-count {
+  font-size: 0.82rem;
+  font-weight: 900;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.14);
+  color: var(--neon-cyan);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+ }
+
+ .stats-box {
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+ }
+
+ /* ================= MODALS (PRE-DUEL & CONFIRM) ================= */
+ .modal-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(2, 5, 15, 0.86);
+  backdrop-filter: blur(10px);
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+  padding: 20px;
+ }
+ .modal-backdrop.open {
+  display: flex;
+  animation: fadeIn 0.25s ease;
+ }
+
+ .vs-modal {
+  max-width: 820px;
+  width: 100%;
+  background: linear-gradient(180deg, #0d1b42 0%, #070f26 100%);
+  border: 2px solid var(--neon-cyan);
+  border-radius: 24px;
+  padding: 36px 42px;
+  text-align: center;
+  box-shadow: 0 0 60px rgba(0, 240, 255, 0.35);
+ }
+
+ .vs-category-pill {
+  display: inline-block;
+  padding: 8px 22px;
+  border-radius: 999px;
+  background: rgba(255, 202, 40, 0.16);
+  border: 1px solid var(--neon-gold);
+  color: var(--neon-gold);
+  font-weight: 900;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  margin-bottom: 22px;
+ }
+
+ .vs-combatants {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 22px;
+  align-items: center;
+  margin-bottom: 28px;
+ }
+
+ .combatant-box {
+  padding: 24px 18px;
+  border-radius: 18px;
+  border: 2px solid rgba(255, 255, 255, 0.25);
+  background: rgba(5, 11, 28, 0.7);
+ }
+
+ .combatant-role {
+  font-size: 0.8rem;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+ }
+
+ .combatant-name {
+  font-size: 1.75rem;
+  font-weight: 900;
+  color: #fff;
+  margin-bottom: 6px;
+ }
+
+ .combatant-start-time {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.15);
+  color: var(--neon-cyan);
+  font-weight: 900;
+  font-size: 0.86rem;
+ }
+
+ .vs-badge {
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: radial-gradient(circle, #ffca28 0%, #ff6f00 100%);
+  color: #070d1f;
+  font-weight: 900;
+  font-size: 1.45rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 28px rgba(255, 202, 40, 0.7);
+ }
+
+ .vs-rules-note {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  margin-bottom: 26px;
+  line-height: 1.55;
+ }
+
+ .vs-actions {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+ }
+
+ /* ================= SCREEN 3: DUEL ARENA (CEAS INDIVIDUAL 60S PENTRU FIECARE JUCĂTOR) ================= */
+ .duel-arena {
+  max-width: 1460px;
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 18px;
+ }
+
+ .duel-Hud {
+  display: grid;
+  grid-template-columns: 1fr 120px 1fr;
+  gap: 20px;
+  align-items: stretch;
+ }
+
+ .duel-player-card {
+  background: rgba(11, 22, 52, 0.84);
+  border: 2px solid rgba(255, 255, 255, 0.16);
+  border-radius: 22px;
+  padding: 16px 24px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 10px;
+  transition: all 0.25s ease;
+  position: relative;
+  overflow: hidden;
+ }
+
+ .duel-card-top {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+ }
+
+ .duel-player-card.inactive-turn {
+  opacity: 0.58;
+  transform: scale(0.985);
+ }
+
+ .duel-player-card.active-turn {
+  border-color: var(--neon-cyan);
+  background: rgba(16, 36, 84, 0.96);
+  box-shadow: 0 0 38px rgba(0, 240, 255, 0.42), inset 0 0 24px rgba(0, 240, 255, 0.16);
+  transform: scale(1.015);
+ }
+
+ .duel-player-info {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-width: 0;
+ }
+
+ .turn-lamp {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+ }
+
+ .duel-player-card.active-turn .turn-lamp {
+  background: var(--neon-green);
+  border-color: #fff;
+  box-shadow: 0 0 20px var(--neon-green), 0 0 36px var(--neon-green);
+  animation: lampBlink 0.9s infinite alternate;
+ }
+
+ @keyframes lampBlink {
+  from { transform: scale(1); }
+  to { transform: scale(1.22); }
+ }
+
+ .duel-p-meta {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  min-width: 0;
+ }
+
+ .duel-p-role {
+  font-size: 0.76rem;
+  font-weight: 800;
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+  color: var(--text-muted);
+ }
+
+ .duel-p-name {
+  font-size: 1.55rem;
+  font-weight: 900;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+ }
+
+ .player-clock-box {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  flex-shrink: 0;
+ }
+
+ .clock-state-tag {
+  font-size: 0.7rem;
+  font-weight: 900;
+  letter-spacing: 1.1px;
+  text-transform: uppercase;
+  padding: 3px 10px;
+  border-radius: 999px;
+  margin-bottom: 4px;
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-muted);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+ }
+
+ .duel-player-card.active-turn .clock-state-tag {
+  background: rgba(0, 230, 118, 0.2);
+  color: var(--neon-green);
+  border-color: var(--neon-green);
+ }
+
+ .player-timer-digits {
+  font-size: 2.85rem;
+  font-weight: 900;
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+  color: #ffffff;
+  text-shadow: 0 0 22px rgba(0, 240, 255, 0.55);
+ }
+
+ .player-timer-digits.warn {
+  color: var(--neon-gold);
+  text-shadow: 0 0 22px rgba(255, 202, 40, 0.65);
+ }
+
+ .player-timer-digits.danger {
+  color: var(--neon-red);
+  text-shadow: 0 0 26px rgba(255, 23, 68, 0.9);
+ }
+
+ .duel-player-card.active-turn.danger-card {
+  border-color: var(--neon-red) !important;
+  box-shadow: 0 0 42px rgba(255, 23, 68, 0.75) !important;
+  animation: dangerPulse 0.55s infinite alternate;
+ }
+
+ @keyframes dangerPulse {
+  from { transform: scale(1.01); }
+  to { transform: scale(1.03); }
+ }
+
+ .player-timer-track {
+  width: 100%;
+  height: 8px;
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+ }
+
+ .player-timer-fill {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--neon-cyan), #2979ff);
+  transition: width 0.08s linear, background 0.25s ease;
+ }
+
+ /* Mijloc VS Hub */
+ .center-vs-hub {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: radial-gradient(circle, #102454 0%, #060d24 100%);
+  border: 2px solid rgba(0, 240, 255, 0.4);
+  border-radius: 20px;
+  padding: 10px;
+  box-shadow: 0 0 26px rgba(0, 240, 255, 0.25);
+ }
+
+ .center-vs-circle {
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #ffca28, #ff6f00);
+  color: #060c1f;
+  font-weight: 900;
+  font-size: 1.25rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 20px rgba(255, 202, 40, 0.65);
+ }
+
+ .center-vs-sub {
+  font-size: 0.7rem;
+  font-weight: 800;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-align: center;
+ }
+
+ /* Active Turn Banner + Question Stage */
+ .question-stage {
+  flex: 1;
+  background: var(--bg-panel);
+  border: 1px solid rgba(0, 240, 255, 0.3);
+  border-radius: 24px;
+  padding: 26px 36px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.7), inset 0 0 40px rgba(0, 240, 255, 0.05);
+ }
+
+ .question-meta-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+ }
+
+ .active-turn-banner {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 18px;
+  border-radius: 999px;
+  background: rgba(0, 240, 255, 0.14);
+  border: 1px solid var(--neon-cyan);
+  font-weight: 900;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+ }
+
+ .duel-cat-tag {
+  font-size: 0.92rem;
+  font-weight: 800;
+  color: var(--neon-gold);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+ }
+
+ .question-box {
+  text-align: center;
+  margin: auto 0;
+  padding: 16px;
+ }
+
+ .question-text {
+  font-size: 2rem;
+  font-weight: 800;
+  line-height: 1.32;
+  color: #ffffff;
+  text-shadow: 0 2px 14px rgba(0, 0, 0, 0.5);
+ }
+
+ .answers-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
+  margin-top: 14px;
+ }
+
+ .answer-btn {
+  background: linear-gradient(145deg, rgba(18, 35, 80, 0.95), rgba(10, 20, 48, 0.95));
+  border: 2px solid rgba(0, 240, 255, 0.35);
+  border-radius: 16px;
+  padding: 20px 24px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 1.28rem;
+  font-weight: 700;
+  text-align: left;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  transition: transform 0.14s ease, border-color 0.14s ease, box-shadow 0.14s ease, background 0.14s ease, opacity 0.14s ease;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.45);
+ }
+
+ .answer-btn:hover:not(:disabled) {
+  transform: translateY(-3px);
+  border-color: var(--neon-cyan);
+  background: linear-gradient(145deg, rgba(25, 52, 115, 0.98), rgba(14, 30, 70, 0.98));
+  box-shadow: 0 0 26px rgba(0, 240, 255, 0.4);
+ }
+
+ .answer-btn:disabled {
+  cursor: default;
+ }
+
+ .answer-key {
+  width: 42px;
+  height: 42px;
+  border-radius: 11px;
+  background: rgba(0, 240, 255, 0.16);
+  border: 1px solid var(--neon-cyan);
+  color: var(--neon-cyan);
+  font-weight: 900;
+  font-size: 1.12rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+ }
+
+ .answer-btn.correct {
+  background: linear-gradient(135deg, #00c853 0%, #007e33 100%) !important;
+  border-color: #b9f6ca !important;
+  box-shadow: 0 0 36px rgba(0, 230, 118, 0.8) !important;
+  transform: scale(1.02);
+ }
+ .answer-btn.correct .answer-key {
+  background: #fff;
+  color: #007e33;
+  border-color: #fff;
+ }
+
+ .answer-btn.wrong {
+  background: linear-gradient(135deg, #ff1744 0%, #9b0026 100%) !important;
+  border-color: #ff8a80 !important;
+  box-shadow: 0 0 28px rgba(255, 23, 68, 0.75) !important;
+  opacity: 0.65;
+  animation: shakeWrong 0.38s ease;
+ }
+ .answer-btn.wrong .answer-key {
+  background: #fff;
+  color: #b00020;
+  border-color: #fff;
+ }
+
+ @keyframes shakeWrong {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-10px); }
+  40% { transform: translateX(10px); }
+  60% { transform: translateX(-7px); }
+  80% { transform: translateX(7px); }
+ }
+
+ .duel-feedback-strip {
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.05rem;
+  font-weight: 900;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+ }
+
+ /* Duel Result Overlay */
+ .duel-result-box {
+  max-width: 700px;
+  width: 100%;
+  background: linear-gradient(180deg, #102457 0%, #071029 100%);
+  border: 2px solid var(--neon-gold);
+  border-radius: 24px;
+  padding: 38px 42px;
+  text-align: center;
+  box-shadow: 0 0 70px rgba(255, 202, 40, 0.4);
+ }
+
+ .result-headline {
+  font-size: 2.3rem;
+  font-weight: 900;
+  color: var(--neon-gold);
+  text-transform: uppercase;
+  margin: 10px 0 12px;
+  text-shadow: 0 0 24px rgba(255, 202, 40, 0.55);
+ }
+
+ .result-reason {
+  font-size: 1.08rem;
+  color: var(--text-main);
+  margin-bottom: 24px;
+  line-height: 1.5;
+ }
+
+ /* ================= SCREEN 4: VICTORY ================= */
+ .victory-wrapper {
+  max-width: 900px;
+  width: 100%;
+  margin: auto;
+  text-align: center;
+  background: var(--bg-panel);
+  border: 2px solid var(--neon-gold);
+  border-radius: 28px;
+  padding: 48px 44px;
+  box-shadow: 0 0 80px rgba(255, 202, 40, 0.35);
+  position: relative;
+  z-index: 2;
+ }
+
+ .trophy-icon {
+  font-size: 5rem;
+  margin-bottom: 12px;
+  filter: drop-shadow(0 0 26px rgba(255, 202, 40, 0.8));
+  animation: floatTrophy 2.4s ease-in-out infinite;
+ }
+
+ @keyframes floatTrophy {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+ }
+
+ .victory-sub {
+  font-size: 1rem;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: var(--neon-cyan);
+  text-transform: uppercase;
+ }
+
+ .victory-winner {
+  font-size: 3.5rem;
+  font-weight: 900;
+  color: var(--neon-gold);
+  margin: 10px 0 16px;
+  text-shadow: 0 0 34px rgba(255, 202, 40, 0.65);
+ }
+
+ .victory-msg {
+  font-size: 1.2rem;
+  color: var(--text-main);
+  margin-bottom: 30px;
+  line-height: 1.55;
+ }
+
+ .victory-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+  margin-bottom: 34px;
+ }
+
+ .v-stat-card {
+  background: rgba(6, 13, 34, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 16px;
+  padding: 18px;
+ }
+
+ .v-stat-val {
+  font-size: 2rem;
+  font-weight: 900;
+  color: var(--neon-cyan);
+ }
+
+ .v-stat-lbl {
+  font-size: 0.84rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-top: 4px;
+ }
+
+ #confetti-canvas {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 40;
+ }
+
+ /* Toast Notification */
+ .toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%) translateY(80px);
+  background: rgba(10, 24, 58, 0.96);
+  border: 1px solid var(--neon-cyan);
+  color: #fff;
+  padding: 12px 24px;
+  border-radius: 999px;
+  font-weight: 700;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.7);
+  transition: transform 0.3s ease;
+  z-index: 90;
+ }
+ .toast.show {
+  transform: translateX(-50%) translateY(0);
+ }
+
+ @media (max-width: 1250px) {
+  .board-layout {
+   grid-template-columns: 1fr;
+  }
+  .players-inputs-grid {
+   grid-template-columns: repeat(2, 1fr);
+  }
+  .duel-Hud {
+   grid-template-columns: 1fr;
+  }
+  .center-vs-hub {
+   display: none;
+  }
+  .question-text {
+   font-size: 1.5rem;
+  }
+  .answer-btn {
+   font-size: 1.1rem;
+   padding: 16px 18px;
+  }
+ }
+</style>
+</head>
+<body>
+
+<style>
+#mp-entry,#mp-wait,#mp-hostbar{font-family:Segoe UI,Roboto,system-ui,sans-serif}
+#mp-entry{position:fixed;inset:0;z-index:10000;display:flex;align-items:center;justify-content:center;padding:20px;background:radial-gradient(ellipse at 50% 0%,#102352 0%,#060b1e 60%,#02040a 100%);color:#f4f8ff}
+.mp-panel{width:min(560px,100%);padding:30px;border:1px solid rgba(0,240,255,.45);border-radius:22px;background:rgba(8,16,39,.96);box-shadow:0 0 45px rgba(0,240,255,.18)}
+.mp-panel h1{font-size:clamp(1.6rem,5vw,2.4rem);letter-spacing:2px;color:#00f0ff;margin-bottom:8px}.mp-panel p{color:#a9bad7;line-height:1.5;margin:8px 0 20px}
+.mp-field{width:100%;padding:13px 14px;margin:7px 0 12px;border-radius:10px;border:1px solid rgba(0,240,255,.35);background:#0c1735;color:white;font-size:1rem;outline:none}
+.mp-actions{display:grid;grid-template-columns:1fr 1fr;gap:12px}.mp-action{border:1px solid #00d9ed;border-radius:10px;padding:13px;background:linear-gradient(135deg,#007f9d,#245bd5);color:white;font-weight:800;cursor:pointer}.mp-action.alt{background:#142447;border-color:#536b91}.mp-error{color:#ff8a9d;min-height:24px;margin-top:12px}.mp-note{font-size:.86rem;color:#8fa4c8}
+#mp-wait{display:none;position:fixed;z-index:9000;inset:auto 16px 16px 16px;max-width:520px;margin:auto;padding:14px 18px;text-align:center;border:1px solid #00d9ed;border-radius:14px;background:rgba(5,13,34,.96);color:#fff;box-shadow:0 0 25px rgba(0,240,255,.2)}
+#mp-hostbar{display:none;position:fixed;z-index:8000;top:76px;right:14px;padding:8px 12px;border-radius:10px;background:rgba(3,13,33,.94);border:1px solid rgba(0,240,255,.45);color:#eafaff;font-size:13px;box-shadow:0 0 18px rgba(0,240,255,.15)}#mp-hostbar button{margin-left:8px;border:0;border-radius:6px;padding:6px 9px;background:#087c9d;color:#fff;cursor:pointer;font-weight:700}
+body.mp-guest #app,body.mp-guest .modal-backdrop{pointer-events:none!important}body.mp-guest #app button{cursor:default!important}
+@media(max-width:600px){.mp-panel{padding:22px}.mp-actions{grid-template-columns:1fr}.mp-panel h1{letter-spacing:1px}#mp-hostbar{top:74px;left:8px;right:8px;text-align:center}}
+</style>
+<div id="mp-entry">
+ <div class="mp-panel">
+  <h1>THE FLOOR</h1><div style="color:#ffca28;font-weight:800;letter-spacing:3px">HOME EDITION · MULTIPLAYER</div>
+  <p>Joacă online cu prietenii. Fiecare intră de pe propriul dispozitiv, iar gazda controlează tabla, duelurile și desfășurarea partidei.</p>
+  <button class="mp-action" id="mp-create" style="width:100%;margin-bottom:18px">✦ Creează o cameră (Gazdă)</button>
+  <div style="height:1px;background:#253b63;margin:8px 0 16px"></div>
+  <label for="mp-code" style="font-weight:700">Ai primit un cod de la gazdă?</label>
+  <input class="mp-field" id="mp-code" placeholder="CODUL CAMEREI" maxlength="5" autocomplete="off">
+  <input class="mp-field" id="mp-name" placeholder="Numele tău (opțional)" maxlength="24" autocomplete="nickname">
+  <button class="mp-action alt" id="mp-join" style="width:100%">Intră în cameră</button>
+  <div class="mp-error" id="mp-error" role="status"></div>
+  <div class="mp-note">Conexiunea este sincronizată în timp real. Nu este necesar un cont.</div>
+ </div>
+</div>
+<div id="mp-wait">Te-ai conectat la cameră. Așteaptă ca gazda să pornească partida…</div>
+<div id="mp-hostbar">Gazdă · Cod invitație: <strong id="mp-room-code">-----</strong> <button id="mp-copy-link">Copiază invitația</button> <span id="mp-count">1 conectat</span></div>
+<script src="/socket.io/socket.io.js"></script>
+
+
+<canvas id="confetti-canvas"></canvas>
+
+<div id="app">
+ <!-- TOP HEADER -->
+ <header class="topbar">
+  <div class="brand">
+   <div class="brand-logo">
+    <span></span><span></span><span></span><span></span>
+   </div>
+   <div class="brand-title">THE FLOOR</div>
+   <div class="brand-sub">HOME EDITION</div>
+  </div>
+
+  <div class="top-actions">
+   <button class="btn btn-ghost" id="btn-sound" title="Sunet Pornit/Oprit">🔊 Sunet: ON</button>
+   <button class="btn btn-ghost" id="btn-download-html" title="Salvează o copie HTML a jocului">💾 Descarcă .HTML</button>
+   <button class="btn btn-danger" id="btn-reset-game" title="Resetează tot progresul și începe de la zero">↺ Resetare Joc</button>
+  </div>
+ </header>
+
+ <!-- ================= SCREEN 1: SETUP ================= -->
+ <section id="screen-setup" class="screen active">
+  <div class="setup-wrapper">
+   <div class="setup-header">
+    <h1>Configurare Partidă</h1>
+    <p>Adaugă jucători apăsând pe <strong>„+”</strong> (2–10 concurenți), alege câte teritorii are fiecare și pornește duelurile cu ceas individual de 1 minut!</p>
+   </div>
+
+   <div class="setup-controls-bar">
+    <!-- Control Jucatori cu + si - -->
+    <div class="control-group">
+     <label>Jucători:</label>
+     <div class="stepper-box">
+      <button type="button" class="stepper-btn" id="btn-player-minus" title="Scade un jucător">−</button>
+      <span class="stepper-val" id="player-count-display">4 Jucători</span>
+      <button type="button" class="stepper-btn" id="btn-player-plus" title="Adaugă un jucător">+</button>
+     </div>
+    </div>
+
+    <!-- Optiunea de selectare cate teritorii sa aiba un jucator -->
+    <div class="control-group">
+     <label for="territories-per-player-select">Teritorii / Jucător:</label>
+     <select id="territories-per-player-select" class="tv-select">
+      <option value="1" selected>1 Teritoriu / jucător</option>
+      <option value="2">2 Teritorii / jucător</option>
+      <option value="3">3 Teritorii / jucător</option>
+      <option value="4">4 Teritorii / jucător</option>
+     </select>
+    </div>
+
+    <!-- Regula cucerire -->
+    <div class="control-group">
+     <label for="conquest-mode-select">Regulă Cucerire:</label>
+     <select id="conquest-mode-select" class="tv-select">
+      <option value="all" selected>Toate teritoriile învinsului (Format TV)</option>
+      <option value="single">Doar teritoriul disputat (Pas cu pas)</option>
+     </select>
+    </div>
+
+    <button class="btn btn-ghost" id="btn-autofill-names">✨ Nume Demo</button>
+   </div>
+
+   <div class="players-inputs-grid" id="players-inputs-grid">
+    <!-- Generat dinamic prin JS + cardul cu PLUS -->
+   </div>
+
+   <div class="setup-footer">
+    <div class="rules-hint">
+     ⏱️ <strong>Regulă Nouă de Timp (1 min / jucător):</strong> Fiecare concurent are propriul ceas de <strong>60 de secunde</strong>. Când răspunzi <strong>corect</strong>, ceasul tău se blochează și trece rândul la adversar!<br>
+     ❌ Când răspunzi <strong>greșit</strong>, rămâi tot tu să găsești răspunsul corect în timp ce secundele tale scad — primul rămas fără timp pierde duelul!
+    </div>
+    <button class="btn btn-primary btn-start-game" id="btn-start-game">Începe Concursul ▶</button>
+   </div>
+  </div>
+ </section>
+
+ <!-- ================= SCREEN 2: GAME BOARD ================= -->
+ <section id="screen-board" class="screen">
+  <div class="board-layout">
+   <div class="floor-stage">
+    <div class="stage-banner">
+     <div class="banner-status">
+      <span class="pulse-beacon"></span>
+      <span id="board-instruction">Selectează un teritoriu atacator de pe tablă sau folosește Randomizer-ul!</span>
+     </div>
+     <div style="display:flex; gap:10px;">
+      <button class="btn btn-ghost" id="btn-clear-selection" style="display:none;">✖ Anulează Selecția</button>
+      <button class="btn btn-gold" id="btn-randomizer">🎲 Randomizer Atacator</button>
+     </div>
+    </div>
+
+    <!-- DYNAMIC GRID -->
+    <div class="the-floor-grid" id="the-floor-grid">
+     <!-- Teritoriile generate dinamic -->
+    </div>
+
+    <div class="stage-footer">
+     <span>💡 Sfat: Dă clic pe teritoriul unui jucător, apoi alege un teritoriu adversar <strong>vecin</strong> (evidențiat cu aur) pentru a lansa duelul.</span>
+     <span id="questions-left-indicator">Întrebări disponibile: 476</span>
+    </div>
+   </div>
+
+   <aside class="sidebar-panel">
+    <div style="display:flex; flex-direction:column; min-height:0; flex:1;">
+     <div class="sidebar-title">
+      <span>Clasament Podea</span>
+      <span id="duel-counter-badge">Duel #1</span>
+     </div>
+     <div class="standings-list" id="standings-list">
+      <!-- Clasament jucători -->
+     </div>
+    </div>
+
+    <div class="stats-box">
+     <div>🏆 Obiectiv: <strong id="objective-count-text">10 / 10 teritorii</strong></div>
+     <div id="mode-indicator-text">Mod: Format TV</div>
+     <div>💾 Progres salvat automat local</div>
+    </div>
+   </aside>
+  </div>
+ </section>
+
+ <!-- ================= SCREEN 3: DUEL ARENA ================= -->
+ <section id="screen-duel" class="screen">
+  <div class="duel-arena">
+   <div class="duel-Hud">
+    <!-- Jucător 1 (Atacator) cu ceas propriu de 60s -->
+    <div class="duel-player-card" id="duel-card-0">
+     <div class="duel-card-top">
+      <div class="duel-player-info">
+       <div class="turn-lamp"></div>
+       <div class="duel-p-meta">
+        <span class="duel-p-role">⚔ Atacator</span>
+        <span class="duel-p-name" id="duel-name-0">Jucător 1</span>
+       </div>
+      </div>
+      <div class="player-clock-box">
+       <span class="clock-state-tag" id="clock-tag-0">⏳ Rândul Tău</span>
+       <div class="player-timer-digits" id="timer-digits-0">60.0</div>
+      </div>
+     </div>
+     <div class="player-timer-track">
+      <div class="player-timer-fill" id="timer-fill-0"></div>
+     </div>
+    </div>
+
+    <!-- Mijloc VS -->
+    <div class="center-vs-hub">
+     <div class="center-vs-circle">VS</div>
+     <div class="center-vs-sub">1 Minut<br>Fiecare</div>
+    </div>
+
+    <!-- Jucător 2 (Apărător) cu ceas propriu de 60s -->
+    <div class="duel-player-card" id="duel-card-1">
+     <div class="duel-card-top">
+      <div class="duel-player-info">
+       <div class="turn-lamp"></div>
+       <div class="duel-p-meta">
+        <span class="duel-p-role">🛡 Apărător</span>
+        <span class="duel-p-name" id="duel-name-1">Jucător 2</span>
+       </div>
+      </div>
+      <div class="player-clock-box">
+       <span class="clock-state-tag" id="clock-tag-1">⏸ Timp Blocat</span>
+       <div class="player-timer-digits" id="timer-digits-1">60.0</div>
+      </div>
+     </div>
+     <div class="player-timer-track">
+      <div class="player-timer-fill" id="timer-fill-1"></div>
+     </div>
+    </div>
+   </div>
+
+   <!-- Zona Întrebării -->
+   <div class="question-stage">
+    <div class="question-meta-bar">
+     <div class="active-turn-banner" id="active-turn-banner">
+      🟢 Răspunde acum: <span id="banner-player-name">-</span>
+     </div>
+     <div class="duel-cat-tag" id="duel-cat-tag">Categorie: Cultură Generală</div>
+    </div>
+
+    <div class="question-box">
+     <div class="question-text" id="question-text">Se încarcă întrebarea...</div>
+    </div>
+
+    <div>
+     <div class="duel-feedback-strip" id="duel-feedback-strip"></div>
+     <div class="answers-grid" id="answers-grid">
+      <!-- 4 butoane de răspuns -->
+     </div>
+    </div>
+   </div>
+  </div>
+ </section>
+
+ <!-- ================= SCREEN 4: FINAL VICTORY ================= -->
+ <section id="screen-victory" class="screen">
+  <div class="victory-wrapper">
+   <div class="trophy-icon">🏆</div>
+   <div class="victory-sub">Campionul Absolut The Floor</div>
+   <div class="victory-winner" id="victory-winner-name">Nume Câștigător</div>
+   <div class="victory-msg" id="victory-msg">
+    Felicitări! Ai cucerit întreaga podea luminoasă și ți-ai demonstrat cunoștințele sub presiunea cronometrului!
+   </div>
+
+   <div class="victory-stats">
+    <div class="v-stat-card">
+     <div class="v-stat-val" id="v-stat-territories">10 / 10</div>
+     <div class="v-stat-lbl">Teritorii Deținute</div>
+    </div>
+    <div class="v-stat-card">
+     <div class="v-stat-val" id="v-stat-duels">0</div>
+     <div class="v-stat-lbl">Dueluri Disputate</div>
+    </div>
+    <div class="v-stat-card">
+     <div class="v-stat-val" id="v-stat-questions">0</div>
+     <div class="v-stat-lbl">Întrebări Jucate</div>
+    </div>
+   </div>
+
+   <button class="btn btn-gold btn-start-game" id="btn-new-match">🎉 Începe o Partidă Nouă</button>
+  </div>
+ </section>
+</div>
+
+<!-- MODAL PRE-DUEL -->
+<div class="modal-backdrop" id="modal-preduel">
+ <div class="vs-modal">
+  <div class="vs-category-pill" id="preduel-category">CATEGORIE: GEOGRAFIE</div>
+  <div class="vs-combatants">
+   <div class="combatant-box" id="preduel-box-attacker">
+    <div class="combatant-role">⚔ Atacator (Începe primul)</div>
+    <div class="combatant-name" id="preduel-attacker-name">Jucător 1</div>
+    <div class="combatant-start-time">⏱ 01:00 (60.0s)</div>
+   </div>
+   <div class="vs-badge">VS</div>
+   <div class="combatant-box" id="preduel-box-defender">
+    <div class="combatant-role">🛡 Apărător (Teritoriu vizat)</div>
+    <div class="combatant-name" id="preduel-defender-name">Jucător 2</div>
+    <div class="combatant-start-time">⏱ 01:00 (60.0s)</div>
+   </div>
+  </div>
+  <div class="vs-rules-note">
+   Fiecare jucător are <strong>1 minut (60 secunde)</strong> pe propriul său ceas (răspundeți cu mouse-ul sau tastele <strong>1, 2, 3, 4</strong>).<br>
+   ✔ La <strong>răspuns corect</strong>, ceasul tău se oprește și trece rândul la adversar.<br>
+   ✖ La <strong>răspuns greșit</strong>, rămâi tot tu să dai răspunsul corect în timp ce timpul tău continuă să scadă!
+  </div>
+  <div class="vs-actions">
+   <button class="btn btn-ghost" id="btn-cancel-duel">Înapoi la Tablă</button>
+   <button class="btn btn-gold btn-start-game" id="btn-launch-duel">🔥 START DUEL (1 min / jucător)</button>
+  </div>
+ </div>
+</div>
+
+<!-- MODAL REZULTAT DUEL -->
+<div class="modal-backdrop" id="modal-duel-result">
+ <div class="duel-result-box">
+  <div class="vs-category-pill" id="result-badge-pill">DUEL ÎNCHEIAT</div>
+  <div class="result-headline" id="result-winner-headline">Jucător Câștigă!</div>
+  <div class="result-reason" id="result-reason-text">Motivul victoriei...</div>
+  <button class="btn btn-primary btn-start-game" id="btn-continue-board">Continuă pe Tablă ▶</button>
+ </div>
+</div>
+
+<!-- MODAL CONFIRMARE RESET -->
+<div class="modal-backdrop" id="modal-confirm-reset">
+ <div class="duel-result-box" style="max-width:520px; border-color: var(--neon-red);">
+  <div class="result-headline" style="color: #ff5252; font-size: 1.8rem;">Resetezi Partida?</div>
+  <div class="result-reason">Progresul actual de pe tablă va fi șters și vei reveni la ecranul de înscriere a jucătorilor.</div>
+  <div class="vs-actions">
+   <button class="btn btn-ghost" id="btn-cancel-reset">Anulează</button>
+   <button class="btn btn-danger" id="btn-confirm-reset-yes" style="padding:12px 26px; font-size:1rem;">Da, Resetează Jocul</button>
+  </div>
+ </div>
+</div>
+
+<div class="toast" id="toast-msg">Mesaj</div>
+
+<script>
+/* =========================================================================
+   BAZA DE DATE DE ÎNTREBĂRI EXTINSĂ ȘI ÎMPROSPĂTATĂ
+   14 CATEGORII x 34 ÎNTREBĂRI = 476 ÎNTREBĂRI ÎN LIMBA ROMÂNĂ
+   Primul element din array-ul `a` este mereu răspunsul corect; la afișare
+   variantele sunt amestecate aleatoriu (Fisher-Yates).
+   ========================================================================= */
+const QUESTION_BANK = [
+ // 1. CULTURĂ GENERALĂ (24)
+ { id: "cg1", c: "Cultură Generală", q: "Care este singurul metal care este lichid la temperatura camerei?", a: ["Mercurul", "Plumbul", "Aluminiul", "Zincul"] },
+ { id: "cg2", c: "Cultură Generală", q: "Câte pătrățele (câmpuri) are în total o tablă clasică de șah?", a: ["64", "49", "81", "100"] },
+ { id: "cg3", c: "Cultură Generală", q: "Ce monedă oficială este folosită în Elveția?", a: ["Francul elvețian", "Euro", "Coroana elvețiană", "Marca"] },
+ { id: "cg4", c: "Cultură Generală", q: "Ce scară este folosită tradițional pentru a măsura magnitudinea cutremurelor?", a: ["Scara Richter", "Scara Beaufort", "Scara Mohs", "Scara Kelvin"] },
+ { id: "cg5", c: "Cultură Generală", q: "Ce piatră prețioasă are în mod natural culoarea verde intens?", a: ["Smaraldul", "Rubinul", "Safirul", "Topazul"] },
+ { id: "cg6", c: "Cultură Generală", q: "Câte fațete are un zar clasic de joc?", a: ["6", "8", "4", "12"] },
+ { id: "cg7", c: "Cultură Generală", q: "Care este limba cu cei mai mulți vorbitori nativi din lume?", a: ["Chineza mandarină", "Engleza", "Spaniola", "Hindi"] },
+ { id: "cg8", c: "Cultură Generală", q: "În ce oraș italian poate fi admirat celebrul Turn Înclinat?", a: ["Pisa", "Florența", "Veneția", "Verona"] },
+ { id: "cg9", c: "Cultură Generală", q: "Ce instrument măsoară viteza vântului?", a: ["Anemometrul", "Barometrul", "Higrometrul", "Altimetrul"] },
+ { id: "cg10", c: "Cultură Generală", q: "Cum se numește scrierea în relief folosită de persoanele nevăzătoare?", a: ["Alfabetul Braille", "Codul Morse", "Alfabetul Chirilic", "Stenografia"] },
+ { id: "cg11", c: "Cultură Generală", q: "Câte minute are o zi întreagă (24 de ore)?", a: ["1.440", "1.200", "2.400", "3.600"] },
+ { id: "cg12", c: "Cultură Generală", q: "Ce reprezintă numărul roman „D”?", a: ["500", "100", "50", "1.000"] },
+ { id: "cg13", c: "Cultură Generală", q: "Cum se numește știința care studiază steagurile și drapelele?", a: ["Vexilologie", "Numismatică", "Filatelie", "Cartografie"] },
+ { id: "cg14", c: "Cultură Generală", q: "Ce grad de rudenie este fratele mamei tale pentru tine?", a: ["Unchi", "Văr", "Cumnat", "Nepot"] },
+ { id: "cg15", c: "Cultură Generală", q: "Din ce substanță sunt formați în principal colții elefanților?", a: ["Fildeș (dentină)", "Keratină", "Cartilaj", "Calcar"] },
+ { id: "cg16", c: "Cultură Generală", q: "Câte zerouri are un miliard?", a: ["9", "6", "12", "8"] },
+ { id: "cg17", c: "Cultură Generală", q: "Cum se numește frica irațională de înălțime?", a: ["Acrofobie", "Agorafobie", "Claustrofobie", "Hidrofobie"] },
+ { id: "cg18", c: "Cultură Generală", q: "În ce țară au fost inventate focurile de artificii și praful de pușcă?", a: ["China", "Japonia", "Italia", "Egipt"] },
+ { id: "cg19", c: "Cultură Generală", q: "Care este piesa de șah care se poate deplasa în formă de „L” și poate sări peste alte piese?", a: ["Calul", "Nebunul", "Turnul", "Pionul"] },
+ { id: "cg20", c: "Cultură Generală", q: "Câte grade are un unghi drept?", a: ["90°", "45°", "180°", "60°"] },
+ { id: "cg21", c: "Cultură Generală", q: "Ce culoare au cutiile negre ale avioanelor comerciale în realitate?", a: ["Portocaliu aprins", "Negru mat", "Albastru închis", "Argintiu"] },
+ { id: "cg22", c: "Cultură Generală", q: "Care este moneda oficială a Regatului Unit al Marii Britanii?", a: ["Lira sterlină", "Euro", "Dolarul britanic", "Coroana"] },
+ { id: "cg23", c: "Cultură Generală", q: "La câți ani de căsătorie se sărbătorește „Nunta de Argint”?", a: ["25 de ani", "50 de ani", "10 ani", "15 ani"] },
+ { id: "cg24", c: "Cultură Generală", q: "În ce oraș european se decernează anual Premiile Nobel pentru Pace?", a: ["Oslo", "Stockholm", "Geneva", "Haga"] },
+
+ // 2. GEOGRAFIE (24)
+ { id: "ge1", c: "Geografie", q: "Care este capitala Noii Zeelande?", a: ["Wellington", "Auckland", "Christchurch", "Sydney"] },
+ { id: "ge2", c: "Geografie", q: "Care este cel mai lung fluviu din America de Sud?", a: ["Amazonul", "Paraná", "Orinoco", "Rio Negro"] },
+ { id: "ge3", c: "Geografie", q: "Ce țară are cea mai lungă linie de coastă din lume?", a: ["Canada", "Australia", "Rusia", "Norvegia"] },
+ { id: "ge4", c: "Geografie", q: "În ce țară se află faimoasa cetate săpată în stâncă Petra?", a: ["Iordania", "Egipt", "Siria", "Maroc"] },
+ { id: "ge5", c: "Geografie", q: "Care este cel mai înalt munte din Africa?", a: ["Kilimanjaro", "Muntele Kenya", "Munții Atlas", "Ruwenzori"] },
+ { id: "ge6", c: "Geografie", q: "Ce canal artificial leagă Marea Mediterană de Marea Roșie?", a: ["Canalul Suez", "Canalul Panama", "Canalul Corint", "Canalul Kiel"] },
+ { id: "ge7", c: "Geografie", q: "Care este capitala Coreei de Sud?", a: ["Seul", "Busan", "Phenian", "Taipei"] },
+ { id: "ge8", c: "Geografie", q: "În ce ocean se află Groapa Marianelor, cel mai adânc punct marin?", a: ["Oceanul Pacific", "Oceanul Atlantic", "Oceanul Indian", "Oceanul Arctic"] },
+ { id: "ge9", c: "Geografie", q: "Care este capitala Portugaliei?", a: ["Lisabona", "Porto", "Madrid", "Faro"] },
+ { id: "ge10", c: "Geografie", q: "Ce fluviu trece prin centrul capitalei Franței, Paris?", a: ["Sena", "Loara", "Ronul", "Tamisa"] },
+ { id: "ge11", c: "Geografie", q: "Care este cel mai mare deșert cald din lume?", a: ["Sahara", "Gobi", "Kalahari", "Deșertul Arabiei"] },
+ { id: "ge12", c: "Geografie", q: "Pe câte continente se întinde teritoriul Turciei?", a: ["2 (Europa și Asia)", "1", "3", "4"] },
+ { id: "ge13", c: "Geografie", q: "Care este capitala Egiptului?", a: ["Cairo", "Alexandria", "Luxor", "Giza"] },
+ { id: "ge14", c: "Geografie", q: "Ce țară este supranumită „Țara celor o mie de lacuri”?", a: ["Finlanda", "Suedia", "Elveția", "Scoția"] },
+ { id: "ge15", c: "Geografie", q: "Care este cea mai înaltă cascadă neîntreruptă din lume?", a: ["Cascada Angel (Venezuela)", "Cascada Niagara", "Cascada Victoria", "Cascada Iguazu"] },
+ { id: "ge16", c: "Geografie", q: "Care este capitala Elveției (orașul federal)?", a: ["Berna", "Zürich", "Geneva", "Basel"] },
+ { id: "ge17", c: "Geografie", q: "Ce munți sunt considerați granița convențională dintre Europa și Asia?", a: ["Munții Ural", "Munții Alpi", "Munții Carpați", "Munții Anzi"] },
+ { id: "ge18", c: "Geografie", q: "Care este capitala Braziliei?", a: ["Brasília", "Rio de Janeiro", "São Paulo", "Salvador"] },
+ { id: "ge19", c: "Geografie", q: "Ce stat insular din Oceanul Indian este renumit pentru lemuri și baobabi?", a: ["Madagascar", "Sri Lanka", "Maldive", "Mauritius"] },
+ { id: "ge20", c: "Geografie", q: "Care este capitala Poloniei?", a: ["Varșovia", "Cracovia", "Gdansk", "Wroclaw"] },
+ { id: "ge21", c: "Geografie", q: "Ce mare nu are ieșire la ocean și este de fapt cel mai mare lac sărat din lume?", a: ["Marea Caspică", "Marea Neagră", "Marea Baltică", "Marea Nordului"] },
+ { id: "ge22", c: "Geografie", q: "În ce țară se află vulcanul Fuji?", a: ["Japonia", "Indonezia", "Filipine", "Italia"] },
+ { id: "ge23", c: "Geografie", q: "Care este capitala Marocului?", a: ["Rabat", "Casablanca", "Marrakech", "Fes"] },
+ { id: "ge24", c: "Geografie", q: "Ce strâmtoare desparte Asia (Rusia) de America de Nord (Alaska)?", a: ["Strâmtoarea Bering", "Strâmtoarea Magellan", "Strâmtoarea Gibraltar", "Strâmtoarea Ormuz"] },
+
+ // 3. ISTORIE (24)
+ { id: "is1", c: "Istorie", q: "În ce an a avut loc Revoluția Franceză (căderea Bastiliei)?", a: ["1789", "1776", "1812", "1848"] },
+ { id: "is2", c: "Istorie", q: "Cine a fost împăratul roman în timpul căruia Dacia a fost cucerită în anul 106?", a: ["Traian", "Hadrian", "Nero", "Marc Aureliu"] },
+ { id: "is3", c: "Istorie", q: "În ce oraș antic se aflau Grădinile Suspendate ale Semiramidei?", a: ["Babilon", "Alexandria", "Atena", "Ninive"] },
+ { id: "is4", c: "Istorie", q: "Cine a condus prima expediție care a înconjurat complet Pământul pe mare (1519–1522)?", a: ["Fernando Magellan (finalizată de Elcano)", "Vasco da Gama", "James Cook", "Amerigo Vespucci"] },
+ { id: "is5", c: "Istorie", q: "Cum se numea regele Macedoniei care a creat un imperiu uriaș până în India înainte de 33 de ani?", a: ["Alexandru cel Mare", "Filip al II-lea", "Leonidas", "Pericle"] },
+ { id: "is6", c: "Istorie", q: "În ce an și-au declarat independența Statele Unite ale Americii?", a: ["1776", "1783", "1804", "1750"] },
+ { id: "is7", c: "Istorie", q: "Ce vulcan a erupt în anul 79 d.Hr., acoperind orașul roman Pompei cu cenușă?", a: ["Vezuviu", "Etna", "Stromboli", "Krakatoa"] },
+ { id: "is8", c: "Istorie", q: "Cine a fost prim-ministrul Marii Britanii în cea mai mare parte a celui de-Al Doilea Război Mondial?", a: ["Winston Churchill", "Neville Chamberlain", "Margaret Thatcher", "Clement Attlee"] },
+ { id: "is9", c: "Istorie", q: "Cum se numea dinastia care a condus Rusia timp de peste 300 de ani până în 1917?", a: ["Romanov", "Habsburg", "Tudor", "Bourbon"] },
+ { id: "is10", c: "Istorie", q: "În ce an a avut loc accidentul nuclear de la Cernobîl?", a: ["1986", "1984", "1989", "1979"] },
+ { id: "is11", c: "Istorie", q: "Cine a fost primul președinte de culoare al Africii de Sud, laureat al Premiului Nobel pentru Pace?", a: ["Nelson Mandela", "Desmond Tutu", "Kofi Annan", "Haile Selassie"] },
+ { id: "is12", c: "Istorie", q: "Cum se numea codul de legi săpat în piatră din Mesopotamia antică („ochi pentru ochi”)?", a: ["Codul lui Hammurabi", "Legile lui Solon", "Magna Carta", "Codul lui Iustinian"] },
+ { id: "is13", c: "Istorie", q: "Ce faraon egiptean tânăr a devenit celebru datorită mormântului său descoperit intact în 1922?", a: ["Tutankhamon", "Ramses al II-lea", "Keops", "Akhenaton"] },
+ { id: "is14", c: "Istorie", q: "Pe ce insulă din Atlanticul de Sud și-a petrecut ultimii ani de exil Napoleon Bonaparte?", a: ["Sfânta Elena", "Elba", "Corsica", "Malta"] },
+ { id: "is15", c: "Istorie", q: "Cum se numea liderul sclavilor răsculați împotriva Republicii Romane în anul 73 î.Hr.?", a: ["Spartacus", "Vercingetorix", "Boudica", "Attila"] },
+ { id: "is16", c: "Istorie", q: "În ce an a fost semnat documentul „Magna Carta” în Anglia?", a: ["1215", "1066", "1348", "1492"] },
+ { id: "is17", c: "Istorie", q: "Ce mare imperiu asiatic a fost întemeiat de Ginghis Han în secolul al XIII-lea?", a: ["Imperiul Mongol", "Imperiul Persan", "Imperiul Otoman", "Imperiul Mughal"] },
+ { id: "is18", c: "Istorie", q: "Care a fost numele de cod al debarcării Aliaților în Normandia la 6 iunie 1944?", a: ["Operațiunea Overlord", "Operațiunea Barbarossa", "Operațiunea Market Garden", "Operațiunea Torch"] },
+ { id: "is19", c: "Istorie", q: "În ce an s-a destrămat oficial Uniunea Sovietică (URSS)?", a: ["1991", "1989", "1993", "1985"] },
+ { id: "is20", c: "Istorie", q: "Cine a fost regina Angliei în timpul „Epocii de Aur” din secolul al XVI-lea?", a: ["Elisabeta I", "Victoria", "Maria Stuart", "Ana Boleyn"] },
+ { id: "is21", c: "Istorie", q: "Ce zid roman antic a fost construit în nordul Britaniei pentru apărare?", a: ["Zidul lui Hadrian", "Zidul lui Constantin", "Zidul Aurelian", "Zidul Antonin"] },
+ { id: "is22", c: "Istorie", q: "Cine l-a asasinat pe președintele american Abraham Lincoln în 1865?", a: ["John Wilkes Booth", "Lee Harvey Oswald", "Gavrilo Princip", "Charles Guiteau"] },
+ { id: "is23", c: "Istorie", q: "În ce oraș bosniac a avut loc atentatul din 1914 care a declanșat Primul Război Mondial?", a: ["Sarajevo", "Belgrad", "Zagreb", "Viena"] },
+ { id: "is24", c: "Istorie", q: "Ce civilizație precolumbiană avea capitala la Tenochtitlan (actualul Ciudad de México)?", a: ["Aztecii", "Incașii", "Mayașii", "Toltecii"] },
+
+ // 4. SPORT (24)
+ { id: "sp1", c: "Sport", q: "Ce țară deține recordul pentru cele mai multe Cupe Mondiale FIFA câștigate la fotbal (5 trofee)?", a: ["Brazilia", "Germania", "Italia", "Argentina"] },
+ { id: "sp2", c: "Sport", q: "Câte Grand Slam-uri există într-un an competițional de tenis?", a: ["4", "3", "5", "6"] },
+ { id: "sp3", c: "Sport", q: "La ce înălțime este montat inelul coșului de baschet regulamentar?", a: ["3,05 metri", "2,85 metri", "3,25 metri", "2,95 metri"] },
+ { id: "sp4", c: "Sport", q: "Ce fost mare fotbalist român a fost supranumit „Maradona din Carpați”?", a: ["Gheorghe Hagi", "Ilie Balaci", "Nicolae Dobrin", "Adrian Mutu"] },
+ { id: "sp5", c: "Sport", q: "Pe ce tip de suprafață se dispută celebrul turneu de tenis de la Wimbledon?", a: ["Iarbă", "Zgură", "Hard", "Covor sintetic"] },
+ { id: "sp6", c: "Sport", q: "Câte minute durează un meci regulamentar de rugby în 15 (fără prelungiri)?", a: ["80 de minute", "90 de minute", "60 de minute", "70 de minute"] },
+ { id: "sp7", c: "Sport", q: "Ce înotător american deține recordul istoric de 23 de medalii olimpice de aur?", a: ["Michael Phelps", "Mark Spitz", "Ian Thorpe", "Ryan Lochte"] },
+ { id: "sp8", c: "Sport", q: "În ce sport concurează echipele pentru trofeul „Stanley Cup”?", a: ["Hochei pe gheață", "Fotbal american", "Baseball", "Baschet"] },
+ { id: "sp9", c: "Sport", q: "Ce jucătoare de tenis din România a câștigat Roland Garros (2018) și Wimbledon (2019)?", a: ["Simona Halep", "Virginia Ruzici", "Sorana Cîrstea", "Irina Begu"] },
+ { id: "sp10", c: "Sport", q: "Care este punctajul maxim posibil într-un joc complet de bowling (12 strike-uri consecutive)?", a: ["300 de puncte", "200 de puncte", "250 de puncte", "180 de puncte"] },
+ { id: "sp11", c: "Sport", q: "Cu ce armă de scrimă a câștigat Ana Maria Popescu (Brânză) aurul olimpic cu echipa la Rio 2016?", a: ["Spadă", "Floretă", "Sabie", "Lance"] },
+ { id: "sp12", c: "Sport", q: "În ce oraș spaniol joacă pe teren propriu clubul FC Barcelona (stadionul Camp Nou)?", a: ["Barcelona", "Madrid", "Sevilla", "Valencia"] },
+ { id: "sp13", c: "Sport", q: "Câte popice se așază la începutul unei lansări clasice de bowling?", a: ["10", "9", "12", "8"] },
+ { id: "sp14", c: "Sport", q: "Cum se numește cursa legendară de anduranță auto care durează o zi întreagă în Franța?", a: ["Cursa de 24 de ore de la Le Mans", "Raliul Dakar", "Marele Premiu de la Monaco", "Indianapolis 500"] },
+ { id: "sp15", c: "Sport", q: "La câți metri de linia porții se află punctul de la 11 metri (penalty) la fotbal?", a: ["11 metri", "9,15 metri", "10 metri", "12 metri"] },
+ { id: "sp16", c: "Sport", q: "Ce baschetbalist legendar a purtat numărul 23 la Chicago Bulls, câștigând 6 titluri NBA?", a: ["Michael Jordan", "Kobe Bryant", "Shaquille O'Neal", "Magic Johnson"] },
+ { id: "sp17", c: "Sport", q: "Câte schimburi (reprize) are un meci profesionist de box de titlu mondial masculin?", a: ["12 runde", "10 runde", "15 runde", "8 runde"] },
+ { id: "sp18", c: "Sport", q: "Ce portar român a apărat 4 lovituri de departajare în finala Cupei Campionilor de la Sevilla (1986)?", a: ["Helmuth Duckadam", "Silviu Lung", "Bogdan Stelea", "Florin Prunea"] },
+ { id: "sp19", c: "Sport", q: "Cum se numește lovitura la golf prin care mingea intră în cupă cu o lovitură sub „par”-ul găurii?", a: ["Birdie", "Bogey", "Albatross", "Fault"] },
+ { id: "sp20", c: "Sport", q: "Ce națională a câștigat Campionatul European de Fotbal EURO 2024?", a: ["Spania", "Anglia", "Franța", "Germania"] },
+ { id: "sp21", c: "Sport", q: "Din ce material era făcută tradițional mingea cu pene (fluturașul) profesională de badminton?", a: ["Pene naturale de gâscă", "Cauciuc plin", "Lemn de plută pur", "Fibră de sticlă"] },
+ { id: "sp22", c: "Sport", q: "Ce mare ciclist sloven a câștigat de mai multe ori Turul Franței în anii 2020?", a: ["Tadej Pogačar", "Primož Roglič", "Chris Froome", "Alberto Contador"] },
+ { id: "sp23", c: "Sport", q: "Ce țară a găzduit Jocurile Olimpice de Vară din anul 2024?", a: ["Franța (Paris)", "Japonia (Tokyo)", "SUA (Los Angeles)", "Italia (Roma)"] },
+ { id: "sp24", c: "Sport", q: "Cum se numește jucătorul specializat în apărare care poartă tricou diferit la volei?", a: ["Libero", "Pivot", "Ridicător", "Extremă"] },
+
+ // 5. FILME ȘI SERIALE (24)
+ { id: "fs1", c: "Filme și Seriale", q: "În ce film rostește Darth Vader celebra replică „No, I am your father”?", a: ["Imperiul contraatacă (Star Wars Ep. V)", "O nouă speranță", "Întoarcerea lui Jedi", "Răzbunarea Sith"] },
+ { id: "fs2", c: "Filme și Seriale", q: "Cum se numește planeta deșertică bogată în „mirodenie” din seria „Dune”?", a: ["Arrakis", "Caladan", "Tatooine", "Pandora"] },
+ { id: "fs3", c: "Filme și Seriale", q: "Ce actriță o interpretează pe Wednesday Addams în serialul Netflix regizat de Tim Burton?", a: ["Jenna Ortega", "Millie Bobby Brown", "Zendaya", "Anya Taylor-Joy"] },
+ { id: "fs4", c: "Filme și Seriale", q: "Care este numele dragonului știrb și prietenos din animația „Cum să îți dresezi dragonul”?", a: ["Știrbul (Toothless)", "Smaug", "Drogon", "Mushu"] },
+ { id: "fs5", c: "Filme și Seriale", q: "Cine a regizat filmele „Pulp Fiction”, „Kill Bill” și „Inglourious Basterds”?", a: ["Quentin Tarantino", "Guy Ritchie", "David Fincher", "Brian De Palma"] },
+ { id: "fs6", c: "Filme și Seriale", q: "În filmul „Gladiatorul” (2000), cine îl interpretează pe generalul Maximus?", a: ["Russell Crowe", "Joaquin Phoenix", "Gerard Butler", "Brad Pitt"] },
+ { id: "fs7", c: "Filme și Seriale", q: "Cum se numește orașul fictiv protejat de supereroul Batman?", a: ["Gotham City", "Metropolis", "Star City", "Central City"] },
+ { id: "fs8", c: "Filme și Seriale", q: "Ce bucătar șoricel visează să gătească într-un restaurant din Paris în animația Pixar din 2007?", a: ["Remy (Ratatouille)", "Stuart Little", "Jerry", "Fievel"] },
+ { id: "fs9", c: "Filme și Seriale", q: "În serialul „Stranger Things”, cum se numește dimensiunea paralelă întunecată?", a: ["The Upside Down", "Zona Crepusculară", "Netherworld", "Matrix"] },
+ { id: "fs10", c: "Filme și Seriale", q: "Ce actor îl interpretează pe Forrest Gump în filmul premiat cu Oscar din 1994?", a: ["Tom Hanks", "Kevin Costner", "Robin Williams", "Jim Carrey"] },
+ { id: "fs11", c: "Filme și Seriale", q: "Din ce casă de la Hogwarts face parte Draco Malfoy în seria „Harry Potter”?", a: ["Slytherin (Viperini)", "Gryffindor", "Ravenclaw", "Hufflepuff"] },
+ { id: "fs12", c: "Filme și Seriale", q: "Ce navă pirat conduce căpitanul Jack Sparrow?", a: ["Perla Neagră (Black Pearl)", "Olandezul Zburător", "Queen Anne's Revenge", "Nautilus"] },
+ { id: "fs13", c: "Filme și Seriale", q: "Cine îl joacă pe personajul Joker în filmul „The Dark Knight” (2008)?", a: ["Heath Ledger", "Jack Nicholson", "Jared Leto", "Cillian Murphy"] },
+ { id: "fs14", c: "Filme și Seriale", q: "Care dintre următoarele filme a câștigat 11 Premii Oscar, la egalitate cu „Titanic” și „Ben-Hur”?", a: ["Stăpânul Inelelor: Întoarcerea Regelui", "Avatar", "Inception", "Interstellar"] },
+ { id: "fs15", c: "Filme și Seriale", q: "În serialul „Peaky Blinders”, cum îl cheamă pe liderul familiei Shelby?", a: ["Thomas Shelby", "Arthur Shelby", "Alfie Solomons", "John Shelby"] },
+ { id: "fs16", c: "Filme și Seriale", q: "Ce mașină este transformată în mașină a timpului în trilogia „Back to the Future”?", a: ["DeLorean DMC-12", "Ford Mustang", "Chevrolet Camaro", "Pontiac Trans Am"] },
+ { id: "fs17", c: "Filme și Seriale", q: "Cum se numește peștișorul-clovn rătăcit în ocean din celebra animație Pixar?", a: ["Nemo", "Dory", "Marlin", "Flounder"] },
+ { id: "fs18", c: "Filme și Seriale", q: "Ce regizor român a câștigat trofeul Palme d'Or la Cannes în 2007 cu „4 luni, 3 săptămâni și 2 zile”?", a: ["Cristian Mungiu", "Cristi Puiu", "Corneliu Porumboiu", "Radu Jude"] },
+ { id: "fs19", c: "Filme și Seriale", q: "În „Avengers: Infinity War”, câte Pietre ale Infinitului adună Thanos în mănușa sa?", a: ["6", "5", "7", "4"] },
+ { id: "fs20", c: "Filme și Seriale", q: "Cum îl cheamă pe căpcăunul verde căsătorit cu Fiona în celebra serie animată DreamWorks?", a: ["Shrek", "Sully", "Hulk", "Groot"] },
+ { id: "fs21", c: "Filme și Seriale", q: "Ce serial HBO prezintă catastrofa centralei atomice din Ucraina din aprilie 1986?", a: ["Chernobyl", "The Last of Us", "Band of Brothers", "True Detective"] },
+ { id: "fs22", c: "Filme și Seriale", q: "Ce actriță a jucat rolul principal în „Gambitul damei” (The Queen's Gambit)?", a: ["Anya Taylor-Joy", "Emma Stone", "Margot Robbie", "Florence Pugh"] },
+ { id: "fs23", c: "Filme și Seriale", q: "Cum se numește parcul cu dinozauri clonați din filmul lui Steven Spielberg din 1993?", a: ["Jurassic Park", "Dino World", "Isla Nublar Resort", "Westworld"] },
+ { id: "fs24", c: "Filme și Seriale", q: "Cine interpretează agentul 007 James Bond în filmul „Skyfall” (2012)?", a: ["Daniel Craig", "Pierce Brosnan", "Sean Connery", "Roger Moore"] },
+
+ // 6. MUZICĂ (24)
+ { id: "mz1", c: "Muzică", q: "Ce artist a lansat cel mai vândut album din istorie, „Thriller” (1982)?", a: ["Michael Jackson", "Elton John", "Madonna", "Stevie Wonder"] },
+ { id: "mz2", c: "Muzică", q: "Ce trupă britanică a compus celebra piesă „Bohemian Rhapsody”?", a: ["Queen", "The Rolling Stones", "U2", "Oasis"] },
+ { id: "mz3", c: "Muzică", q: "La ce instrument de suflat din alamă a excelat legendarul muzician de jazz Louis Armstrong?", a: ["Trompetă", "Saxofon", "Clarinet", "Trombon"] },
+ { id: "mz4", c: "Muzică", q: "Cine a fost supranumit „Regele Rock and Roll-ului”?", a: ["Elvis Presley", "Chuck Berry", "Johnny Cash", "Jerry Lee Lewis"] },
+ { id: "mz5", c: "Muzică", q: "Ce naționalitate avea genialul compozitor Wolfgang Amadeus Mozart?", a: ["Austriacă", "Germană", "Italiană", "Elvețiană"] },
+ { id: "mz6", c: "Muzică", q: "Ce cântăreață columbiană a interpretat imnul Cupei Mondiale 2010, „Waka Waka”?", a: ["Shakira", "Jennifer Lopez", "Camila Cabello", "Karol G"] },
+ { id: "mz7", c: "Muzică", q: "Câte pedale are în mod obișnuit un pian clasic de concert?", a: ["3", "2", "4", "1"] },
+ { id: "mz8", c: "Muzică", q: "Ce DJ și producător suedez a lansat hitul mondial „Wake Me Up”?", a: ["Avicii", "David Guetta", "Tiësto", "Kygo"] },
+ { id: "mz9", c: "Muzică", q: "Cum se numește celebrul muzician român supranumit „Regele Naiului”?", a: ["Gheorghe Zamfir", "Grigoraș Dinicu", "Fănică Luca", "Tudor Gheorghe"] },
+ { id: "mz10", c: "Muzică", q: "Ce formație hard-rock australiană a lansat albumul „Back in Black”?", a: ["AC/DC", "Metallica", "Guns N' Roses", "Iron Maiden"] },
+ { id: "mz11", c: "Muzică", q: "Ce artistă pop americană a susținut turneul record „The Eras Tour”?", a: ["Taylor Swift", "Beyoncé", "Ariana Grande", "Billie Eilish"] },
+ { id: "mz12", c: "Muzică", q: "Cine a compus muzica baletului „Lacul lebedelor”?", a: ["Piotr Ilici Ceaikovski", "Igor Stravinski", "Serghei Prokofiev", "Giuseppe Verdi"] },
+ { id: "mz13", c: "Muzică", q: "Din ce țară provine stilul muzical Reggae, popularizat de Bob Marley?", a: ["Jamaica", "Cuba", "Brazilia", "Mexic"] },
+ { id: "mz14", c: "Muzică", q: "Care este vocea feminină cu registrul cel mai înalt (acut) în operă?", a: ["Soprană", "Mezzosoprană", "Altistă", "Tenor"] },
+ { id: "mz15", c: "Muzică", q: "Ce trupă grunge americană l-a avut ca solist pe Kurt Cobain?", a: ["Nirvana", "Pearl Jam", "Soundgarden", "Red Hot Chili Peppers"] },
+ { id: "mz16", c: "Muzică", q: "Ce cântăreț britanic a lansat piesa „Shape of You”?", a: ["Ed Sheeran", "Sam Smith", "Harry Styles", "Shawn Mendes"] },
+ { id: "mz17", c: "Muzică", q: "Ce festival major de muzică electronică se organizează anual la Cluj-Napoca?", a: ["UNTOLD", "Neversea", "Coachella", "Tomorrowland"] },
+ { id: "mz18", c: "Muzică", q: "Cum se numea celebrul lutier italian din Cremona ale cărui viori valorează milioane de dolari?", a: ["Antonio Stradivari", "Giuseppe Guarneri", "Nicolò Amati", "Andrea Bocelli"] },
+ { id: "mz19", c: "Muzică", q: "Ce duo francez de muzică electronică purta căști de robot și a lansat „Get Lucky”?", a: ["Daft Punk", "Justice", "Air", "Modjo"] },
+ { id: "mz20", c: "Muzică", q: "Ce trupă irlandeză îl are ca solist vocal pe Bono?", a: ["U2", "The Cranberries", "Coldplay", "Depeche Mode"] },
+ { id: "mz21", c: "Muzică", q: "Care este instrumentul muzical tradițional scoțian cu burduf și țevi?", a: ["Cimpoiul", "Harpa", "Mandolina", "Acordeonul"] },
+ { id: "mz22", c: "Muzică", q: "Cine interpretează celebra baladă „Purple Rain”?", a: ["Prince", "Sting", "George Michael", "Phil Collins"] },
+ { id: "mz23", c: "Muzică", q: "Ce cântăreață româncă a avut succes internațional uriaș cu piesa „Hot” în 2008?", a: ["Inna", "Alexandra Stan", "Andra", "Delia"] },
+ { id: "mz24", c: "Muzică", q: "În ce oraș austriac are loc tradiționalul Concert de Anul Nou al Filarmonicii?", a: ["Viena", "Salzburg", "Graz", "Innsbruck"] },
+
+ // 7. ANIMALE (24)
+ { id: "an1", c: "Animale", q: "Ce pasăre de pradă nocturnă își poate roti capul până la 270 de grade?", a: ["Bufnița", "Vulturul", "Șoimul", "Corbul"] },
+ { id: "an2", c: "Animale", q: "Câte compartimente are stomacul unei vaci (rumegător)?", a: ["4", "2", "1", "3"] },
+ { id: "an3", c: "Animale", q: "Care este cel mai mare șarpe constrictor (ca greutate) din lume?", a: ["Anaconda verde", "Cobra regală", "Vipera cu corn", "Mamba neagră"] },
+ { id: "an4", c: "Animale", q: "Ce culoare are de fapt pielea ursului polar sub blana sa translucidă?", a: ["Neagră", "Albă", "Roz", "Gri deschis"] },
+ { id: "an5", c: "Animale", q: "Care este cel mai lent mamifer arboricol din pădurile tropicale ale Americii?", a: ["Leneșul", "Koala", "Urangutanul", "Oposumul"] },
+ { id: "an6", c: "Animale", q: "Cum se numește grupul social organizat în care trăiesc lupii?", a: ["Haită", "Turmă", "Cireadă", "Stol"] },
+ { id: "an7", c: "Animale", q: "Ce insectă produce mierea și ceara naturală din stup?", a: ["Albina meliferă", "Viespea", "Bondarul", "Furnica"] },
+ { id: "an8", c: "Animale", q: "La căluțul-de-mare, cine poartă ouăle în pungă până la eclozare?", a: ["Masculul", "Femela", "Ambii pe rând", "Le îngroapă în nisip"] },
+ { id: "an9", c: "Animale", q: "Care este cea mai mare specie de felină sălbatică din lume?", a: ["Tigrul siberian", "Leul african", "Jaguarul", "Puma"] },
+ { id: "an10", c: "Animale", q: "Ce depozitează de fapt cămila în cocoașele sale?", a: ["Grăsime (rezervă de energie)", "Apă lichidă", "Aer rece", "Hrană nedigerată"] },
+ { id: "an11", c: "Animale", q: "Ce pasăre exotică are penaj roz datorită pigmenților din creveții și algele pe care le consumă?", a: ["Flamingo", "Pelicanul", "Tucanul", "Papagalul Ara"] },
+ { id: "an12", c: "Animale", q: "Câte picioare are o insectă adultă (precum furnica sau buburuza)?", a: ["6", "8", "4", "10"] },
+ { id: "an13", c: "Animale", q: "Care este cel mai inteligent nevertebrat marin, capabil să deschidă borcane și să folosească unelte?", a: ["Caracatița", "Meduza", "Steaua de mare", "Ariciul de mare"] },
+ { id: "an14", c: "Animale", q: "Ce rozător semiacvatic este faimos pentru construirea de baraje din lemn pe râuri?", a: ["Castorul", "Vidra", "Nutria", "Marmota"] },
+ { id: "an15", c: "Animale", q: "Care este cel mai mare rozător din lume, originar din America de Sud?", a: ["Capibara", "Porcul spinos", "Chinchilla", "Hârciogul"] },
+ { id: "an16", c: "Animale", q: "Cum se numește animalul sălbatic protejat din Carpați cu coarne mici întoarse ca niște cârlige?", a: ["Capra neagră", "Muflonul", "Zimbrul", "Cerbul lopătar"] },
+ { id: "an17", c: "Animale", q: "Ce pasăre de pradă atinge peste 300 km/h în picaj, fiind cel mai rapid animal din lume?", a: ["Șoimul călător", "Acvila de munte", "Rândunica", "Albatrosul"] },
+ { id: "an18", c: "Animale", q: "Câte perechi de aripi are o libelulă?", a: ["2 perechi (4 aripi)", "1 pereche (2 aripi)", "3 perechi (6 aripi)", "Niciuna"] },
+ { id: "an19", c: "Animale", q: "Ce specie de delfin mare, alb cu negru, este supranumită „balena ucigașă”?", a: ["Orca", "Narvalul", "Beluga", "Cașalotul"] },
+ { id: "an20", c: "Animale", q: "Care este cel mai mare primat antropoid în viață?", a: ["Gorila", "Cimpanzeul", "Urangutanul", "Babuinul"] },
+ { id: "an21", c: "Animale", q: "Cum se numește perioada de somn profund prin care urșii sau aricii trec peste iarnă?", a: ["Hibernare", "Estivație", "Migrație", "Năpârlire"] },
+ { id: "an22", c: "Animale", q: "Ce animal african cu dungi alb-negre are un model unic pentru fiecare exemplar, ca o amprentă?", a: ["Zebra", "Hiena", "Okapi", "Gnu"] },
+ { id: "an23", c: "Animale", q: "Ce mamifer erbivor masiv din râurile africane petrece ziua în apă pentru a-și proteja pielea?", a: ["Hipopotamul", "Rinocerul", "Bivolul african", "Tapirul"] },
+ { id: "an24", c: "Animale", q: "Care este cel mai mare pește din lume (inofensiv, hrănindu-se cu plancton)?", a: ["Rechinul-balenă", "Marele rechin alb", "Tonul roșu", "Morunul"] },
+
+ // 8. ȘTIINȚĂ (24)
+ { id: "st1", c: "Știință", q: "Ce element chimic are numărul atomic 1 și este cel mai răspândit în Univers?", a: ["Hidrogenul", "Heliul", "Oxigenul", "Carbonul"] },
+ { id: "st2", c: "Știință", q: "Ce forță fizică menține planetele pe orbită în jurul Soarelui?", a: ["Gravitația", "Magnetismul", "Forța de frecare", "Tensiunea superficială"] },
+ { id: "st3", c: "Știință", q: "Care este organitul celular supranumit „uzina energetică a celulei”?", a: ["Mitocondria", "Ribozomul", "Nucleul", "Aparatul Golgi"] },
+ { id: "st4", c: "Știință", q: "Cine a fost prima persoană din istorie distinsă cu două Premii Nobel în domenii științifice diferite?", a: ["Marie Curie", "Albert Einstein", "Nikola Tesla", "Niels Bohr"] },
+ { id: "st5", c: "Știință", q: "Câte cromozomi are o celulă somatică umană sănătoasă?", a: ["46 (23 de perechi)", "24", "48", "32"] },
+ { id: "st6", c: "Știință", q: "Ce gaz absorb plantele din atmosferă în timpul fotosintezei?", a: ["Dioxidul de carbon (CO2)", "Azotul", "Argonul", "Monoxidul de carbon"] },
+ { id: "st7", c: "Știință", q: "La ce temperatură sunt egale valorile pe scările Celsius și Fahrenheit?", a: ["-40°", "0°", "-273°", "32°"] },
+ { id: "st8", c: "Știință", q: "Ce planetă din Sistemul Solar se rotește practic „culcată pe o parte” (înclinare ~98°)?", a: ["Uranus", "Marte", "Mercur", "Venus"] },
+ { id: "st9", c: "Știință", q: "Care este simbolul chimic al Fierului în tabelul lui Mendeleev?", a: ["Fe", "Fi", "Fr", "Ir"] },
+ { id: "st10", c: "Știință", q: "În cât timp ajunge lumina de la Soare până la Pământ?", a: ["Aproximativ 8 minute și 20 secunde", "1 secundă", "1 oră", "24 de minute"] },
+ { id: "st11", c: "Știință", q: "Care este cel mai lung și mai rezistent os din corpul uman?", a: ["Femurul", "Tibia", "Humerusul", "Clavicula"] },
+ { id: "st12", c: "Știință", q: "Cum se numește galaxia din care face parte Sistemul nostru Solar?", a: ["Calea Lactee", "Andromeda", "Nebuloasa Orion", "Centaurus A"] },
+ { id: "st13", c: "Știință", q: "Care este unitatea de măsură pentru frecvența undelor în Sistemul Internațional?", a: ["Hertz (Hz)", "Decibel (dB)", "Newton (N)", "Joule (J)"] },
+ { id: "st14", c: "Știință", q: "Ce tip de lentile se folosesc pentru corectarea miopiei?", a: ["Lentile divergente (concave)", "Lentile convergente", "Prisme opace", "Oglinzi plane"] },
+ { id: "st15", c: "Știință", q: "Ce substanță dă culoarea roșie sângelui și transportă oxigenul?", a: ["Hemoglobina", "Melanina", "Clorofila", "Insulina"] },
+ { id: "st16", c: "Știință", q: "Ce valoare indică un pH neutru (precum cel al apei pure la 25 °C)?", a: ["7", "0", "14", "10"] },
+ { id: "st17", c: "Știință", q: "Ce savant englez a formulat legile mișcării și legea atracției universale?", a: ["Isaac Newton", "Charles Darwin", "Michael Faraday", "Stephen Hawking"] },
+ { id: "st18", c: "Știință", q: "Cum se numește trecerea directă a unei substanțe din stare solidă în stare gazoasă?", a: ["Sublimare", "Condensare", "Topire", "Solidificare"] },
+ { id: "st19", c: "Știință", q: "Care este cea mai fierbinte planetă din Sistemul Solar datorită efectului intens de seră?", a: ["Venus", "Mercur", "Marte", "Jupiter"] },
+ { id: "st20", c: "Știință", q: "Ce savant român a primit Premiul Nobel pentru Fiziologie sau Medicină în 1974 (biologie celulară)?", a: ["George Emil Palade", "Henri Coandă", "Ana Aslan", "Grigore Antipa"] },
+ { id: "st21", c: "Știință", q: "Ce parte a ochiului uman își modifică diametrul pentru a regla cantitatea de lumină care intră?", a: ["Pupila (controlată de iris)", "Retina", "Nervul optic", "Sclerotica"] },
+ { id: "st22", c: "Știință", q: "Din ce elemente chimice este alcătuită sarea de bucătărie (NaCl)?", a: ["Sodiu și Clor", "Potasiu și Carbon", "Calciu și Oxigen", "Azot și Hidrogen"] },
+ { id: "st23", c: "Știință", q: "Cum se numește scala științifică absolută de temperatură al cărei zero absolut este -273,15 °C?", a: ["Kelvin", "Celsius", "Rankine", "Pascal"] },
+ { id: "st24", c: "Știință", q: "Ce fenomen astronomic are loc atunci când Luna se interpune exact între Soare și Pământ?", a: ["Eclipsă de Soare", "Eclipsă de Lună", "Solstițiu de vară", "Echinocțiu"] },
+
+ // 9. TEHNOLOGIE (24)
+ { id: "th1", c: "Tehnologie", q: "Ce înseamnă acronimul „Wi-Fi” în rețelele fără fir (inspirat de Hi-Fi)?", a: ["Tehnologie wireless bazată pe standardul IEEE 802.11", "Cablu optic submarin", "Procesor grafic integrat", "Memorie externă magnetică"] },
+ { id: "th2", c: "Tehnologie", q: "Ce limbaj de programare poartă același nume cu o specie de șarpe constrictor?", a: ["Python", "Java", "Ruby", "Swift"] },
+ { id: "th3", c: "Tehnologie", q: "Ce combinație de taste din Windows anulează ultima acțiune („Undo”)?", a: ["Ctrl + Z", "Ctrl + Y", "Ctrl + A", "Ctrl + P"] },
+ { id: "th4", c: "Tehnologie", q: "Cum se numește sistemul de operare open-source creat de Linus Torvalds în 1991, având ca mascotă pinguinul Tux?", a: ["Linux", "macOS", "MS-DOS", "Symbian"] },
+ { id: "th5", c: "Tehnologie", q: "Ce înseamnă „AI” în domeniul informaticii moderne?", a: ["Inteligență Artificială", "Interfață Audio", "Arhitectură Internă", "Automatizare Industrială"] },
+ { id: "th6", c: "Tehnologie", q: "Ce rezoluție în pixeli corespunde standardului „Full HD” (1080p)?", a: ["1920 × 1080", "1280 × 720", "3840 × 2160", "1024 × 768"] },
+ { id: "th7", c: "Tehnologie", q: "Ce companie americană este lider mondial în proiectarea plăcilor video GeForce RTX?", a: ["NVIDIA", "Intel", "Cisco", "Oracle"] },
+ { id: "th8", c: "Tehnologie", q: "Ce cod de eroare HTTP apare pe web atunci când o pagină nu a fost găsită?", a: ["404 Not Found", "200 OK", "500 OK", "301 Found"] },
+ { id: "th9", c: "Tehnologie", q: "Cum se numește conectorul reversibil modern utilizat pentru încărcarea majorității telefoanelor noi?", a: ["USB Type-C", "VGA", "PS/2", "SCART"] },
+ { id: "th10", c: "Tehnologie", q: "Ce platformă este folosită de programatori din toată lumea pentru găzduirea proiectelor cu sistemul Git?", a: ["GitHub", "Spotify", "Pinterest", "Shazam"] },
+ { id: "th11", c: "Tehnologie", q: "Ce companie românească de securitate cibernetică este renumită la nivel global pentru soluțiile sale antivirus?", a: ["Bitdefender", "UiPath", "eMAG", "Dedeman"] },
+ { id: "th12", c: "Tehnologie", q: "În ce sistem numeric (bază) lucrează nativ procesoarele calculatoarelor digitale?", a: ["Binar (0 și 1)", "Zecimal (0–9)", "Octal", "Roman"] },
+ { id: "th13", c: "Tehnologie", q: "Ce înseamnă rata de împrospătare „144 Hz” a unui monitor de gaming?", a: ["Afișează până la 144 de cadre pe secundă", "Consumă 144 de wați", "Are diagonala de 144 cm", "Are 144 milioane de culori"] },
+ { id: "th14", c: "Tehnologie", q: "Cum se numește tipul de atac cibernetic prin care un email fals imită o bancă pentru a fura parole?", a: ["Phishing", "Overclocking", "Rendering", "Streaming"] },
+ { id: "th15", c: "Tehnologie", q: "Ce foaie de stiluri este utilizată împreună cu HTML pentru designul și culorile paginilor web?", a: ["CSS", "SQL", "XML", "CSV"] },
+ { id: "th16", c: "Tehnologie", q: "Ce companie a lansat consola hibridă portabilă „Switch”?", a: ["Nintendo", "Sony", "Atari", "Valve"] },
+ { id: "th17", c: "Tehnologie", q: "Ce înseamnă acronimul „GPS” folosit la navigație?", a: ["Global Positioning System", "General Power Supply", "Graphic Processing Server", "Guided Satellite Phone"] },
+ { id: "th18", c: "Tehnologie", q: "Ce tip de cod pătrat bidimensional poate fi scanat rapid cu camera telefonului pentru a deschide un link?", a: ["Cod QR", "Cod Morse", "Cod ZIP", "Cod PIN"] },
+ { id: "th19", c: "Tehnologie", q: "Câți Terabytes (în bază 1000/1024 aproximativă) urmează imediat ca ordin de mărime într-un Petabyte?", a: ["1.024 TB (sau 1.000 TB)", "100 TB", "10 TB", "64 TB"] },
+ { id: "th20", c: "Tehnologie", q: "Cine este informaticianul britanic care a inventat World Wide Web (WWW) în 1989 la CERN?", a: ["Tim Berners-Lee", "Alan Turing", "Steve Wozniak", "Jeff Bezos"] },
+ { id: "th21", c: "Tehnologie", q: "Ce componentă a PC-ului poartă denumirea de „Motherboard”?", a: ["Placa de bază", "Sursa de curent", "Carcasa", "Monitorul"] },
+ { id: "th22", c: "Tehnologie", q: "Ce protocol este utilizat la plata contactless cu telefonul sau cardul la câțiva centimetri de POS?", a: ["NFC (Near Field Communication)", "LTE", "GPS", "HDMI"] },
+ { id: "th23", c: "Tehnologie", q: "Ce aplicație din suita Microsoft Office este dedicată calculului tabelar și formulelor?", a: ["Microsoft Excel", "Microsoft Word", "PowerPoint", "OneNote"] },
+ { id: "th24", c: "Tehnologie", q: "Ce cablu transmite simultan semnal video digital de înaltă definiție și sunet către televizor?", a: ["HDMI", "Jack 3.5 mm", "RJ-45 Ethernet", "SATA"] },
+
+ // 10. GASTRONOMIE (24)
+ { id: "ga1", c: "Gastronomie", q: "Din ce țară provine faimoasa supă cu tăiței, supă concentrată și ou marinat numită „Ramen”?", a: ["Japonia (inspirată din tăițeii chinezești)", "Mexic", "Grecia", "Maroc"] },
+ { id: "ga2", c: "Gastronomie", q: "Ce tip de nuci măcinate se folosesc pentru prepararea celebrelor fursecuri franțuzești „Macarons”?", a: ["Făină de migdale", "Alune de pământ", "Castane", "Semințe de floarea-soarelui"] },
+ { id: "ga3", c: "Gastronomie", q: "Care este ingredientul principal al preparatului oriental „Falafel”?", a: ["Năutul (sau bobul)", "Carnea de vită", "Vinetele", "Orezul"] },
+ { id: "ga4", c: "Gastronomie", q: "Ce brânză italiană tare, maturată minimum 12–24 luni, poartă titlul de „Regele brânzeturilor”?", a: ["Parmigiano Reggiano (Parmezan)", "Mozzarella proaspătă", "Camembert", "Telemea"] },
+ { id: "ga5", c: "Gastronomie", q: "Din ce fruct exotic se extrage laptele de cocos folosit în curry-urile asiatice?", a: ["Nuca de cocos", "Fructul pasiunii", "Papaya", "Ananasul"] },
+ { id: "ga6", c: "Gastronomie", q: "Ce ciorbă românească faimoasă din bucătăria urbană se drege cu smântână, gălbenuș, oțet și usturoi?", a: ["Ciorba de burtă", "Supa de găluște", "Ciorba de lobodă", "Supa cremă de linte"] },
+ { id: "ga7", c: "Gastronomie", q: "Ce condiment se obține din scoarța interioară uscată a unor arbori din genul Cinnamomum?", a: ["Scorțișoara", "Piperul negru", "Nucșoara", "Cuișoarele"] },
+ { id: "ga8", c: "Gastronomie", q: "Cum se numește aluatul opărit franțuzesc din care se fac eclerele și profiterolul?", a: ["Aluat Choux (pâte à choux)", "Aluat fraged", "Aluat de pizza", "Aluat filo"] },
+ { id: "ga9", c: "Gastronomie", q: "Ce sos clasic pentru paste Bolognese se gătește lent din carne tocată, roșii, vin și legume?", a: ["Sos Ragù", "Sos Alfredo", "Sos Carbonara", "Sos Tartar"] },
+ { id: "ga10", c: "Gastronomie", q: "În rețeta italiană autentică de „Spaghetti alla Carbonara”, ce ingredient NU se folosește niciodată?", a: ["Smântâna dulce de gătit", "Gălbenușul de ou", "Pecorino Romano", "Guanciale"] },
+ { id: "ga11", c: "Gastronomie", q: "Din ce țară provine ciocolata triunghiulară cu miere și nuga de migdale „Toblerone”?", a: ["Elveția", "Belgia", "Franța", "Olanda"] },
+ { id: "ga12", c: "Gastronomie", q: "Ce legumă este ingredientul vedetă în preparatul grecesc „Musaca” (Moussaka)?", a: ["Vânăta", "Conopida", "Varza murată", "Sfecla roșie"] },
+ { id: "ga13", c: "Gastronomie", q: "Ce sos grecesc faimos se prepară din iaurt strecurat, castravete ras, usturoi și ulei de măsline?", a: ["Tzatziki", "Guacamole", "Harissa", "Chimichurri"] },
+ { id: "ga14", c: "Gastronomie", q: "Cum se numește foaia neagră/verde închis de algă marină presată în care se rulează sushi maki?", a: ["Nori", "Wakame", "Tofu", "Tempura"] },
+ { id: "ga15", c: "Gastronomie", q: "Ce brânză cipriotă semi-tare are punctul de topire ridicat și poate fi friptă direct pe grătar?", a: ["Halloumi", "Mascarpone", "Brie", "Roquefort"] },
+ { id: "ga16", c: "Gastronomie", q: "Ce soi românesc tradițional de struguri negri este renumit pentru vinuri roșii nobile?", a: ["Fetească Neagră", "Grasă de Cotnari", "Tămâioasă Românească", "Chardonnay"] },
+ { id: "ga17", c: "Gastronomie", q: "Pe ce scară se măsoară iuțeala ardeilor iuți (conținutul de capsaicină)?", a: ["Scara Scoville", "Scara Brix", "Scara Richter", "Scara Celsius"] },
+ { id: "ga18", c: "Gastronomie", q: "Din ce regiune a Franței provine singurul vin spumant care are dreptul legal să poarte numele „Champagne”?", a: ["Regiunea Champagne", "Bordeaux", "Provence", "Normandia"] },
+ { id: "ga19", c: "Gastronomie", q: "Ce fel de ciuperci subterane rare, căutate cu câini dresați, sunt printre cele mai scumpe ingrediente din lume?", a: ["Trufele", "Gălbiorii", "Champignon", "Pleurotus"] },
+ { id: "ga20", c: "Gastronomie", q: "Ce desert austriac faimos este un tort de ciocolată densă cu strat fin de gem de caise și glazură?", a: ["Tort Sacher (Sachertorte)", "Pavlova", "Baklava", "Crème brûlée"] },
+ { id: "ga21", c: "Gastronomie", q: "Ce tip de orez cu bob rotund și bogat în amidon se folosește tradițional la Risotto?", a: ["Arborio / Carnaroli", "Basmati", "Orez sălbatic negru", "Couscous"] },
+ { id: "ga22", c: "Gastronomie", q: "Din ce fructe se obține uleiul extravirgin emblematic dietei mediteraneene?", a: ["Măsline", "Nuci", "Struguri", "Soia"] },
+ { id: "ga23", c: "Gastronomie", q: "Cum se numește lipia subțire din porumb sau grâu folosită în bucătăria mexicană pentru tacos și burritos?", a: ["Tortilla", "Focaccia", "Baguette", "Ciabatta"] },
+ { id: "ga24", c: "Gastronomie", q: "Ce plantă aromatică proaspătă intră obligatoriu în cocktailul cubanez Mojito?", a: ["Menta", "Rozmarinul", "Cimbrul", "Tarhonul"] },
+
+ // 11. LITERATURĂ ȘI ARTĂ (24)
+ { id: "la1", c: "Literatură și Artă", q: "Cine a scris romanul de aventuri „Cei trei mușchetari”?", a: ["Alexandre Dumas", "Jules Verne", "Honoré de Balzac", "Gustave Flaubert"] },
+ { id: "la2", c: "Literatură și Artă", q: "În ce muzeu din Madrid este expusă monumentala pictură „Guernica” a lui Pablo Picasso?", a: ["Muzeul Reina Sofía", "Muzeul Luvru", "Galeria Uffizi", "British Museum"] },
+ { id: "la3", c: "Literatură și Artă", q: "Cine este autorul nuvelei fantastice „La țigănci” și al romanului „Maitreyi”?", a: ["Mircea Eliade", "Camil Petrescu", "Eugen Lovinescu", "Lucian Blaga"] },
+ { id: "la4", c: "Literatură și Artă", q: "Ce pictor renascentist italian a realizat fresca „Cina cea de Taină” din Milano?", a: ["Leonardo da Vinci", "Sandro Botticelli", "Tizian", "Giotto"] },
+ { id: "la5", c: "Literatură și Artă", q: "Cine a scris celebra serie de cărți cu vrăjitori „Harry Potter”?", a: ["J.K. Rowling", "J.R.R. Tolkien", "C.S. Lewis", "Suzanne Collins"] },
+ { id: "la6", c: "Literatură și Artă", q: "Cum se numește sculptura celebră în marmură albă a lui Michelangelo expusă în Florența?", a: ["David", "Gânditorul", "Discobolul", "Venus din Milo"] },
+ { id: "la7", c: "Literatură și Artă", q: "Ce scriitor rus a scris romanele monumentale „Crimă și pedeapsă” și „Frații Karamazov”?", a: ["Fiodor Dostoievski", "Lev Tolstoi", "Anton Cehov", "Nikolai Gogol"] },
+ { id: "la8", c: "Literatură și Artă", q: "Cine este autorul nuvelei „Moara cu noroc”?", a: ["Ioan Slavici", "Ion Creangă", "Liviu Rebreanu", "Mihail Sadoveanu"] },
+ { id: "la9", c: "Literatură și Artă", q: "Ce pictor norvegian expresionist este autorul tabloului „Strigătul” (The Scream)?", a: ["Edvard Munch", "Gustav Klimt", "Paul Cézanne", "Claude Monet"] },
+ { id: "la10", c: "Literatură și Artă", q: "Ce scriitoare britanică, supranumită „Regina Crimei”, l-a creat pe detectivul Hercule Poirot?", a: ["Agatha Christie", "Jane Austen", "Virginia Woolf", "Emily Brontë"] },
+ { id: "la11", c: "Literatură și Artă", q: "Care sunt celelalte două monumente majore ale lui Brâncuși la Târgu Jiu, pe lângă Coloana Infinitului?", a: ["Masa Tăcerii și Poarta Sărutului", "Pasărea Măiastră și Domnișoara Pogany", "Muza Adormită și Rugăciunea", "Cumințenia Pământului și Sărutul"] },
+ { id: "la12", c: "Literatură și Artă", q: "Cine a scris romanul „Enigma Otiliei”?", a: ["George Călinescu", "Camil Petrescu", "Hortensia Papadat-Bengescu", "Marin Preda"] },
+ { id: "la13", c: "Literatură și Artă", q: "Ce curent artistic de la sfârșitul secolului XIX poartă numele tabloului „Impresie, răsărit de soare” al lui Claude Monet?", a: ["Impresionismul", "Cubismul", "Barocul", "Dadaismul"] },
+ { id: "la14", c: "Literatură și Artă", q: "Ce dramaturg franco-român este unul dintre fondatorii teatrului absurdului („Cântăreața cheală”)?", a: ["Eugen Ionescu", "Tristan Tzara", "Emil Cioran", "Matei Vișniec"] },
+ { id: "la15", c: "Literatură și Artă", q: "Cine a scris romanul „Un veac de singurătate”, capodoperă a realismului magic?", a: ["Gabriel García Márquez", "Mario Vargas Llosa", "Paulo Coelho", "Isabel Allende"] },
+ { id: "la16", c: "Literatură și Artă", q: "Ce pictor austriac este faimos pentru tabloul decorat cu foiță de aur „Sărutul”?", a: ["Gustav Klimt", "Egon Schiele", "Albrecht Dürer", "Peter Paul Rubens"] },
+ { id: "la17", c: "Literatură și Artă", q: "Cine a scris „Douăzeci de mii de leghe sub mări”?", a: ["Jules Verne", "Daniel Defoe", "Jonathan Swift", "Robert Louis Stevenson"] },
+ { id: "la18", c: "Literatură și Artă", q: "Ce pictor olandez a pictat celebrul portret „Fata cu cercel de perlă”?", a: ["Johannes Vermeer", "Rembrandt van Rijn", "Hieronymus Bosch", "Piet Mondrian"] },
+ { id: "la19", c: "Literatură și Artă", q: "Cine este poetul și filosoful român care a scris „Eu nu strivesc corola de minuni a lumii”?", a: ["Lucian Blaga", "Tudor Arghezi", "Ion Barbu", "George Bacovia"] },
+ { id: "la20", c: "Literatură și Artă", q: "Ce arhitect catalan a proiectat celebra catedrală neterminată „Sagrada Família” din Barcelona?", a: ["Antoni Gaudí", "Santiago Calatrava", "Le Corbusier", "Frank Lloyd Wright"] },
+ { id: "la21", c: "Literatură și Artă", q: "În ce piesă a lui William Shakespeare apare celebrul monolog „A fi sau a nu fi”?", a: ["Hamlet", "Macbeth", "Othello", "Regele Lear"] },
+ { id: "la22", c: "Literatură și Artă", q: "Ce pictor român este supranumit „poetul plastic al florilor” (faimos pentru tablourile cu anemone)?", a: ["Ștefan Luchian", "Nicolae Grigorescu", "Ion Andreescu", "Corneliu Baba"] },
+ { id: "la23", c: "Literatură și Artă", q: "Cine a scris „Divina Comedie” (Infernul, Purgatoriul și Paradisul)?", a: ["Dante Alighieri", "Giovanni Boccaccio", "Francesco Petrarca", "Niccolò Machiavelli"] },
+ { id: "la24", c: "Literatură și Artă", q: "Ce sculptor francez a realizat celebra statuie de bronz „Gânditorul” (Le Penseur)?", a: ["Auguste Rodin", "Camille Claudel", "Frédéric Bartholdi", "Alberto Giacometti"] },
+
+ // 12. ROMÂNIA (24)
+ { id: "ro1", c: "România", q: "Care este cea mai înaltă șosea din România, atingând 2.145 m altitudine în Pasul Urdele?", a: ["Transalpina (DN67C)", "Transfăgărășan", "Pasul Prislop", "Cheile Bicazului"] },
+ { id: "ro2", c: "România", q: "În ce oraș se află Biserica Neagră, cel mai mare edificiu gotic din România?", a: ["Brașov", "Sibiu", "Sighișoara", "Mediaș"] },
+ { id: "ro3", c: "România", q: "Câte județe are România (fără Municipiul București)?", a: ["41", "40", "42", "39"] },
+ { id: "ro4", c: "România", q: "Care este cel mai mare lac glaciar ca suprafață din România, situat în Munții Retezat?", a: ["Lacul Bucura", "Lacul Zănoaga", "Lacul Bâlea", "Lacul Capra"] },
+ { id: "ro5", c: "România", q: "Ce domnitor a realizat prima unire politică a Țării Românești, Transilvaniei și Moldovei în anul 1600?", a: ["Mihai Viteazul", "Mircea cel Bătrân", "Matei Basarab", "Constantin Brâncoveanu"] },
+ { id: "ro6", c: "România", q: "În ce localitate din județul Cluj se află spectaculoasa salină amenajată ca parc subteran turistic?", a: ["Turda", "Praid", "Slănic Prahova", "Cacica"] },
+ { id: "ro7", c: "România", q: "Ce oraș din vestul țării a devenit în 1884 primul oraș din Europa continentală cu străzi iluminate electric?", a: ["Timișoara", "Arad", "Oradea", "Cluj-Napoca"] },
+ { id: "ro8", c: "România", q: "Unde poate fi admirată celebra sculptură gigantică în stâncă a chipului regelui Decebal?", a: ["La Cazanele Dunării (lângă Orșova)", "Pe Valea Oltului", "În Cheile Turzii", "La Bicaz"] },
+ { id: "ro9", c: "România", q: "Care este singura cetate medievală din sud-estul Europei locuită continuu până astăzi, inclusă în UNESCO?", a: ["Cetatea Sighișoara", "Cetatea Rupea", "Cetatea Neamț", "Cetatea Făgăraș"] },
+ { id: "ro10", c: "România", q: "În ce județ se află faimoșii Vulcani Noroioși de la Pâclele Mari și Pâclele Mici?", a: ["Buzău", "Vrancea", "Prahova", "Dâmbovița"] },
+ { id: "ro11", c: "România", q: "Ce culoare de fundal albastru unic în lume a făcut celebră Mănăstirea Voroneț?", a: ["Albastru de Voroneț", "Verde de Sucevița", "Roșu de Humor", "Galben de Moldovița"] },
+ { id: "ro12", c: "România", q: "Care a fost primul rege al României încoronat în anul 1881?", a: ["Carol I", "Ferdinand I", "Carol al II-lea", "Mihai I"] },
+ { id: "ro13", c: "România", q: "Ce monument emblematic din Constanța, construit în stil Art Nouveau, străjuiește faleza Mării Negre?", a: ["Cazinoul din Constanța", "Farul Genovez", "Ateneul Român", "Palatul Mogoșoaia"] },
+ { id: "ro14", c: "România", q: "În ce an a aderat România la Uniunea Europeană?", a: ["2007", "2004", "2010", "2002"] },
+ { id: "ro15", c: "România", q: "Ce rezervație naturală din România găzduiește Pădurea Letea, cu cai sălbatici și dune de nisip?", a: ["Rezervația Biosferei Delta Dunării", "Parcul Național Retezat", "Munții Apuseni", "Cheile Nerei"] },
+ { id: "ro16", c: "România", q: "Cine a scris versurile poeziei „Un răsunet”, devenită imnul național „Deșteaptă-te, române!”?", a: ["Andrei Mureșanu", "Vasile Alecsandri", "Mihai Eminescu", "Octavian Goga"] },
+ { id: "ro17", c: "România", q: "În ce oraș din Transilvania a avut loc încoronarea Regelui Ferdinand și a Reginei Maria în 1922?", a: ["Alba Iulia", "Sibiu", "Curtea de Argeș", "Iași"] },
+ { id: "ro18", c: "România", q: "Ce formațiuni naturale spectaculoase din Munții Bucegi seamănă cu o ciupercă și un chip uman?", a: ["Babele și Sfinxul", "Pietrele Doamnei", "Detunatele", "Coloanele de Bazalt"] },
+ { id: "ro19", c: "România", q: "Ce mare biolog român a pus bazele biospeologiei mondiale (studiul vieții din peșteri)?", a: ["Emil Racoviță", "Grigore Antipa", "Victor Babeș", "Ion Borcea"] },
+ { id: "ro20", c: "România", q: "Care este cea mai mare clădire administrativă din Europa (a doua din lume după Pentagon), aflată în București?", a: ["Palatul Parlamentului", "Palatul Victoria", "Palatul Cotroceni", "Casa Scânteii"] },
+ { id: "ro21", c: "România", q: "Ce râu formează granița de est dintre România și Republica Moldova?", a: ["Prutul", "Siretul", "Mureșul", "Tisa"] },
+ { id: "ro22", c: "România", q: "În ce localitate din județul Brașov se află celebrul castel asociat turistic cu legenda lui Dracula?", a: ["Bran", "Râșnov", "Prejmer", "Sinaia"] },
+ { id: "ro23", c: "România", q: "Ce medic român a fondat primul Institut Național de Geriatrie din lume și a creat „Gerovital H3”?", a: ["Ana Aslan", "Sofia Ionescu-Ogrezeanu", "Mina Minovici", "Carol Davila"] },
+ { id: "ro24", c: "România", q: "Ce peșteră din Munții Apuseni adăpostește unul dintre cei mai mari ghețari subterani din lume?", a: ["Peștera Scărișoara", "Peștera Urșilor", "Peștera Muierilor", "Peștera Polovragi"] },
+
+ // 13. MITOLOGIE (24)
+ { id: "mt1", c: "Mitologie", q: "Cine era zeul suprem al tunetului și al cerului în mitologia greacă, stăpânul Muntelui Olimp?", a: ["Zeus", "Poseidon", "Hades", "Apollo"] },
+ { id: "mt2", c: "Mitologie", q: "În mitologia nordică, cum se numește ciocanul magic al zeului Thor?", a: ["Mjölnir", "Gungnir", "Excalibur", "Aegis"] },
+ { id: "mt3", c: "Mitologie", q: "Ce creatură cu corp de om și cap de taur era închisă în Labirintul din Creta?", a: ["Minotaurul", "Centaurul", "Hidra", "Ciclopul"] },
+ { id: "mt4", c: "Mitologie", q: "Care era echivalentul roman al zeului grec al mărilor, Poseidon?", a: ["Neptun", "Marte", "Jupiter", "Mercur"] },
+ { id: "mt5", c: "Mitologie", q: "Ce zeu egiptean al mumificării și al lumii de dincolo era reprezentat cu cap de șacal?", a: ["Anubis", "Ra", "Horus", "Osiris"] },
+ { id: "mt6", c: "Mitologie", q: "Care era singurul punct vulnerabil al eroului grec Ahile?", a: ["Călcâiul", "Umărul", "Inima", "Ochiul stâng"] },
+ { id: "mt7", c: "Mitologie", q: "Ce pasăre mitică legendară renăștea periodic din propria-i cenușă?", a: ["Pasărea Phoenix", "Grifonul", "Harpia", "Roc"] },
+ { id: "mt8", c: "Mitologie", q: "Cum se numea câinele cu trei capete care păzea intrarea în Lumea Subpământeană a lui Hades?", a: ["Cerber", "Fenrir", "Orthrus", "Chimera"] },
+ { id: "mt9", c: "Mitologie", q: "Cine era zeul suprem înțelept din mitologia nordică, stăpânul Asgardului?", a: ["Odin", "Loki", "Freyr", "Baldur"] },
+ { id: "mt10", c: "Mitologie", q: "Ce gorgonă cu șerpi în loc de păr împietrea pe oricine o privea direct în ochi?", a: ["Medusa", "Circe", "Calipso", "Cassandra"] },
+ { id: "mt11", c: "Mitologie", q: "Cum se numea calul înaripat alb din mitologia greacă?", a: ["Pegas", "Bucefal", "Sleipnir", "Troian"] },
+ { id: "mt12", c: "Mitologie", q: "Cine a furat focul de la zei pentru a-l dărui oamenilor, fiind înlănțuit pe o stâncă?", a: ["Prometeu", "Atlas", "Sisif", "Icar"] },
+ { id: "mt13", c: "Mitologie", q: "Câte munci legendare a trebuit să îndeplinească eroul Heracle (Hercule)?", a: ["12", "10", "7", "9"] },
+ { id: "mt14", c: "Mitologie", q: "Cine era zeul suprem la geto-daci, venerat pe muntele sfânt Kogaionon?", a: ["Zamolxis", "Bendis", "Mithra", "Ares"] },
+ { id: "mt15", c: "Mitologie", q: "Cum se numea tânărul care a zburat prea aproape de Soare cu aripi lipite cu ceară?", a: ["Icar", "Dedal", "Tezeu", "Perseu"] },
+ { id: "mt16", c: "Mitologie", q: "Ce titan a fost condamnat să țină bolta cerească pe umerii săi pentru eternitate?", a: ["Atlas", "Cronos", "Hyperion", "Oceanus"] },
+ { id: "mt17", c: "Mitologie", q: "În mitologia romană, cum se numeau cei doi frați gemeni hrăniți de o lupoaică, fondatorii Romei?", a: ["Romulus și Remus", "Castor și Pollux", "Apollo și Artemis", "Hector și Paris"] },
+ { id: "mt18", c: "Mitologie", q: "Cum se numește sala măreață din Asgard unde ajung războinicii vikingi căzuți eroic în luptă?", a: ["Valhalla", "Olimp", "Câmpiile Elizee", "Tartar"] },
+ { id: "mt19", c: "Mitologie", q: "Cine era zeița greacă a iubirii și a frumuseții, născută din spuma mării?", a: ["Afrodita", "Demetra", "Hestia", "Persefona"] },
+ { id: "mt20", c: "Mitologie", q: "Ce rege legendar transforma în aur tot ce atingea cu mâinile sale?", a: ["Regele Midas", "Regele Agamemnon", "Regele Priam", "Regele Minos"] },
+ { id: "mt21", c: "Mitologie", q: "Cine era mesagerul zeilor greci, purtând sandale înaripate?", a: ["Hermes", "Hefaistos", "Dionisos", "Ares"] },
+ { id: "mt22", c: "Mitologie", q: "Ce erou grec a condus corabia Argo în căutarea Lânii de Aur?", a: ["Iason", "Ulise (Odiseu)", "Enea", "Orfeu"] },
+ { id: "mt23", c: "Mitologie", q: "Cum se numea sabia legendară a Regelui Arthur din miturile britanice?", a: ["Excalibur", "Durandal", "Andúril", "Joyeuse"] },
+ { id: "mt24", c: "Mitologie", q: "Ce zeu egiptean al Soarelui călătorea zilnic pe cer în barca sa solară?", a: ["Ra", "Seth", "Thoth", "Ptah"] },
+
+ // 14. AUTO ȘI INVENȚII (24)
+ { id: "ai1", c: "Auto și Invenții", q: "Ce marcă germană de automobile are ca siglă patru inele întrepătrunse?", a: ["Audi", "BMW", "Mercedes-Benz", "Opel"] },
+ { id: "ai2", c: "Auto și Invenții", q: "Cine este inventatorul american căruia i se atribuie perfecționarea și brevetarea becului electric comercial (1879)?", a: ["Thomas Edison", "Alexander Graham Bell", "Samuel Morse", "Henry Ford"] },
+ { id: "ai3", c: "Auto și Invenții", q: "Ce animal cabrat apare pe emblema galbenă a constructorului italian Ferrari?", a: ["Un cal negru (Căluțul Cabrat)", "Un taur furios", "Un leu", "Un șarpe"] },
+ { id: "ai4", c: "Auto și Invenții", q: "Ce marcă auto românească produce la Mioveni modelele Duster, Sandero și Logan?", a: ["Dacia", "ARO", "Oltcit", "Rocar"] },
+ { id: "ai5", c: "Auto și Invenții", q: "Cine a brevetat primul telefon funcțional în anul 1876?", a: ["Alexander Graham Bell", "Guglielmo Marconi", "Rudolf Diesel", "James Watt"] },
+ { id: "ai6", c: "Auto și Invenții", q: "Din ce țară provine constructorul de automobile Volvo, recunoscut pentru inovațiile în siguranță?", a: ["Suedia", "Germania", "Elveția", "Finlanda"] },
+ { id: "ai7", c: "Auto și Invenții", q: "Ce mare inventator chimist suedez a inventat dinamita și a lăsat prin testament fondul Premiilor Nobel?", a: ["Alfred Nobel", "Anders Celsius", "Carl Linnaeus", "John Ericsson"] },
+ { id: "ai8", c: "Auto și Invenții", q: "În ce oraș german își are sediul central compania BMW (Bayerische Motoren Werke)?", a: ["München", "Stuttgart", "Wolfsburg", "Frankfurt"] },
+ { id: "ai9", c: "Auto și Invenții", q: "Ce frați americani au realizat primul zbor controlat cu un avion motorizat în anul 1903?", a: ["Frații Wright (Orville și Wilbur)", "Frații Montgolfier", "Frații Lumière", "Frații Warner"] },
+ { id: "ai10", c: "Auto și Invenții", q: "Ce marcă auto japoneză este cel mai mare producător mondial de mașini și produce modelul Corolla?", a: ["Toyota", "Honda", "Mazda", "Subaru"] },
+ { id: "ai11", c: "Auto și Invenții", q: "Ce înseamnă sistemul de siguranță „ABS” prezent pe automobilele moderne?", a: ["Sistem antiblocare a roților la frânare", "Asistență automată la baterie", "Aer condiționat bi-zonal", "Amortizor balansat spate"] },
+ { id: "ai12", c: "Auto și Invenții", q: "Ce inginer german a construit în 1885–1886 primul automobil modern cu motor cu ardere internă pe benzină?", a: ["Karl Benz", "Ferdinand Porsche", "Enzo Ferrari", "Gottlieb Daimler"] },
+ { id: "ai13", c: "Auto și Invenții", q: "Ce inventator sârbo-american a revoluționat lumea prin sistemele de curent alternativ (AC)?", a: ["Nikola Tesla", "Thomas Edison", "George Westinghouse", "Benjamin Franklin"] },
+ { id: "ai14", c: "Auto și Invenții", q: "Ce animal apare pe emblema mărcii de supercaruri italiene Lamborghini?", a: ["Un taur de luptă", "Un ghepard", "Un vultur", "Un scorpion"] },
+ { id: "ai15", c: "Auto și Invenții", q: "Ce companie suedeză a inventat centura de siguranță în 3 puncte în 1959 și a oferit brevetul gratuit tuturor?", a: ["Volvo", "Saab", "Ford", "Renault"] },
+ { id: "ai16", c: "Auto și Invenții", q: "Cine au fost frații francezi care au inventat cinematograful și au organizat prima proiecție publică în 1895?", a: ["Frații Lumière", "Frații Montgolfier", "Frații Grimm", "Frații Peugeot"] },
+ { id: "ai17", c: "Auto și Invenții", q: "Ce constructor auto francez are ca emblemă un leu?", a: ["Peugeot", "Renault", "Citroën", "Bugatti"] },
+ { id: "ai18", c: "Auto și Invenții", q: "Ce antreprenor american a introdus banda rulantă modernă de asamblare în fabrici cu celebrul Model T?", a: ["Henry Ford", "Elon Musk", "Louis Chevrolet", "Walter Chrysler"] },
+ { id: "ai19", c: "Auto și Invenții", q: "Din ce țară provin mărcile auto Hyundai și Kia?", a: ["Coreea de Sud", "Japonia", "China", "Malaezia"] },
+ { id: "ai20", c: "Auto și Invenții", q: "Ce instrument optic folosit pentru observarea astrelor a fost perfecționat și îndreptat spre cer de Galileo Galilei în 1609?", a: ["Luneta astronomică (telescopul)", "Microscopul", "Periscopul", "Sextantul"] },
+ { id: "ai21", c: "Auto și Invenții", q: "Ce model legendar de mașină sport germană produs neîntrerupt din 1964 poartă numărul „911”?", a: ["Porsche 911", "BMW M3", "Audi R8", "Mercedes SL"] },
+ { id: "ai22", c: "Auto și Invenții", q: "Ce inventator italian a primit Premiul Nobel pentru Fizică pentru dezvoltarea telegrafiei fără fir (radioului)?", a: ["Guglielmo Marconi", "Alessandro Volta", "Luigi Galvani", "Enrico Fermi"] },
+ { id: "ai23", c: "Auto și Invenții", q: "Ce statuetă celebră decorează capota automobilelor de ultra-lux Rolls-Royce?", a: ["Spirit of Ecstasy", "Steaua în trei colțuri", "Tridentul lui Neptun", "Jaguarul în salt"] },
+ { id: "ai24", c: "Auto și Invenții", q: "Cine a inventat paratrăsnetul în secolul al XVIII-lea?", a: ["Benjamin Franklin", "James Watt", "Robert Fulton", "Louis Braille"] },
+
+  // ÎNTREBĂRI SUPLIMENTARE: 10 noi pentru fiecare categorie (140)
+  { id: "cg25", c: "Cultură Generală", q: "Ce unitate măsoară intensitatea curentului electric?", a: ["Amperul", "Voltul", "Wattul", "Ohmul"] },
+  { id: "cg26", c: "Cultură Generală", q: "Care este cel mai dur mineral de pe scara Mohs?", a: ["Diamantul", "Cuarțul", "Topazul", "Corindonul"] },
+  { id: "cg27", c: "Cultură Generală", q: "Câte laturi are un hexagon?", a: ["6", "5", "7", "8"] },
+  { id: "cg28", c: "Cultură Generală", q: "Ce gaz este cel mai abundent în atmosfera Pământului?", a: ["Azotul", "Oxigenul", "Dioxidul de carbon", "Hidrogenul"] },
+  { id: "cg29", c: "Cultură Generală", q: "Cum se numește transformarea apei din stare lichidă în vapori?", a: ["Evaporare", "Condensare", "Solidificare", "Topire"] },
+  { id: "cg30", c: "Cultură Generală", q: "Ce instrument indică direcția nordului magnetic?", a: ["Busola", "Termometrul", "Cronometrul", "Barometrul"] },
+  { id: "cg31", c: "Cultură Generală", q: "Câte luni are un an bisect?", a: ["12", "13", "11", "10"] },
+  { id: "cg32", c: "Cultură Generală", q: "Ce culoare rezultă din amestecul albastru cu galben?", a: ["Verde", "Mov", "Portocaliu", "Roșu"] },
+  { id: "cg33", c: "Cultură Generală", q: "Care este simbolul chimic al aurului?", a: ["Au", "Ag", "Fe", "Cu"] },
+  { id: "cg34", c: "Cultură Generală", q: "Cum se numește studiul monedelor?", a: ["Numismatică", "Arheologie", "Genealogie", "Heraldică"] },
+  { id: "ge25", c: "Geografie", q: "Care este capitala Canadei?", a: ["Ottawa", "Toronto", "Vancouver", "Montreal"] },
+  { id: "ge26", c: "Geografie", q: "În ce țară se află orașul Marrakech?", a: ["Maroc", "Tunisia", "Algeria", "Egipt"] },
+  { id: "ge27", c: "Geografie", q: "Care este cel mai mare ocean al lumii?", a: ["Pacific", "Atlantic", "Indian", "Arctic"] },
+  { id: "ge28", c: "Geografie", q: "Ce fluviu traversează Budapesta?", a: ["Dunărea", "Rinul", "Sena", "Volga"] },
+  { id: "ge29", c: "Geografie", q: "Care este capitala Norvegiei?", a: ["Oslo", "Bergen", "Stockholm", "Helsinki"] },
+  { id: "ge30", c: "Geografie", q: "Pe ce continent se află deșertul Atacama?", a: ["America de Sud", "Africa", "Asia", "Australia"] },
+  { id: "ge31", c: "Geografie", q: "Ce țară are forma unei cizme pe hartă?", a: ["Italia", "Grecia", "Croația", "Portugalia"] },
+  { id: "ge32", c: "Geografie", q: "Care este capitala Islandei?", a: ["Reykjavik", "Dublin", "Tallinn", "Copenhaga"] },
+  { id: "ge33", c: "Geografie", q: "În ce țară se află orașul Kyoto?", a: ["Japonia", "China", "Coreea de Sud", "Thailanda"] },
+  { id: "ge34", c: "Geografie", q: "Ce mare se află între România și Peninsula Balcanică?", a: ["Marea Neagră", "Marea Adriatică", "Marea Baltică", "Marea Nordului"] },
+  { id: "is25", c: "Istorie", q: "În ce an a început Primul Război Mondial?", a: ["1914", "1912", "1916", "1918"] },
+  { id: "is26", c: "Istorie", q: "Cine a fost primul împărat roman?", a: ["Augustus", "Nero", "Iulius Cezar", "Traian"] },
+  { id: "is27", c: "Istorie", q: "Ce civilizație a construit piramidele de la Giza?", a: ["Egiptenii antici", "Romanii", "Grecii", "Persanii"] },
+  { id: "is28", c: "Istorie", q: "În ce an a căzut Zidul Berlinului?", a: ["1989", "1987", "1991", "1993"] },
+  { id: "is29", c: "Istorie", q: "Cine a fost conducătorul dacilor în timpul războaielor cu Traian?", a: ["Decebal", "Burebista", "Mircea cel Bătrân", "Menumorut"] },
+  { id: "is30", c: "Istorie", q: "Ce oraș era centrul Imperiului Bizantin?", a: ["Constantinopol", "Roma", "Alexandria", "Antiohia"] },
+  { id: "is31", c: "Istorie", q: "În ce an a fost semnată Declarația de Independență a SUA?", a: ["1776", "1789", "1812", "1750"] },
+  { id: "is32", c: "Istorie", q: "Cine a fost supranumit Regele Soare?", a: ["Ludovic al XIV-lea", "Napoleon Bonaparte", "Henric al VIII-lea", "Carol cel Mare"] },
+  { id: "is33", c: "Istorie", q: "Ce popor antic a folosit scrierea cuneiformă?", a: ["Sumerienii", "Vikingii", "Incașii", "Celții"] },
+  { id: "is34", c: "Istorie", q: "În ce an s-a încheiat Al Doilea Război Mondial în Europa?", a: ["1945", "1944", "1946", "1939"] },
+  { id: "sp25", c: "Sport", q: "Câți jucători are o echipă de volei pe teren?", a: ["6", "5", "7", "11"] },
+  { id: "sp26", c: "Sport", q: "În ce sport se folosește termenul „birdie”?", a: ["Golf", "Tenis", "Baschet", "Rugby"] },
+  { id: "sp27", c: "Sport", q: "Câte minute durează un meci standard de fotbal, fără prelungiri?", a: ["90", "80", "100", "60"] },
+  { id: "sp28", c: "Sport", q: "Ce țară a câștigat Cupa Mondială de fotbal din 2018?", a: ["Franța", "Croația", "Germania", "Brazilia"] },
+  { id: "sp29", c: "Sport", q: "În ce sport concurează un sportiv la proba de decatlon?", a: ["Atletism", "Înot", "Ciclism", "Gimnastică"] },
+  { id: "sp30", c: "Sport", q: "Cum se numește egalitatea la șah în care niciun jucător nu poate câștiga?", a: ["Remiză", "Mat", "Rocadă", "Șah etern"] },
+  { id: "sp31", c: "Sport", q: "Câte seturi trebuie câștigate de regulă pentru a câștiga un meci masculin de Grand Slam?", a: ["3", "2", "4", "5"] },
+  { id: "sp32", c: "Sport", q: "În ce sport se folosește o mănușă numită mitt?", a: ["Baseball", "Fotbal", "Hochei", "Handbal"] },
+  { id: "sp33", c: "Sport", q: "Ce culoare are tricoul liderului în Turul Franței?", a: ["Galben", "Verde", "Roșu", "Alb"] },
+  { id: "sp34", c: "Sport", q: "Câte inele are simbolul Jocurilor Olimpice?", a: ["5", "4", "6", "7"] },
+  { id: "fs25", c: "Filme și Seriale", q: "În ce serie apare școala Hogwarts?", a: ["Harry Potter", "Stăpânul Inelelor", "Cronicile din Narnia", "Twilight"] },
+  { id: "fs26", c: "Filme și Seriale", q: "Cum se numește regatul din filmul de animație „Frozen”?", a: ["Arendelle", "Narnia", "Genovia", "Corona"] },
+  { id: "fs27", c: "Filme și Seriale", q: "Ce personaj este detectivul creat de Arthur Conan Doyle?", a: ["Sherlock Holmes", "Hercule Poirot", "Philip Marlowe", "Columbo"] },
+  { id: "fs28", c: "Filme și Seriale", q: "În ce oraș fictiv locuiește Batman?", a: ["Gotham City", "Metropolis", "Star City", "Central City"] },
+  { id: "fs29", c: "Filme și Seriale", q: "Cum se numește cowboy-ul jucărie din „Toy Story”?", a: ["Woody", "Buzz", "Rex", "Andy"] },
+  { id: "fs30", c: "Filme și Seriale", q: "Ce serial urmărește familia Shelby?", a: ["Peaky Blinders", "The Crown", "Friends", "Dark"] },
+  { id: "fs31", c: "Filme și Seriale", q: "Cine este personajul principal din seria „The Witcher”?", a: ["Geralt din Rivia", "Jon Snow", "Aragorn", "Legolas"] },
+  { id: "fs32", c: "Filme și Seriale", q: "Ce film prezintă un parc cu dinozauri readuși la viață?", a: ["Jurassic Park", "Jumanji", "King Kong", "Avatar"] },
+  { id: "fs33", c: "Filme și Seriale", q: "Cum se numește orașul în care locuiește familia Simpson?", a: ["Springfield", "Quahog", "South Park", "Hill Valley"] },
+  { id: "fs34", c: "Filme și Seriale", q: "Ce supererou este cunoscut drept Omul-Păianjen?", a: ["Spider-Man", "Iron Man", "Flash", "Thor"] },
+  { id: "mz25", c: "Muzică", q: "Câte corzi are o chitară clasică standard?", a: ["6", "4", "5", "7"] },
+  { id: "mz26", c: "Muzică", q: "Ce instrument are clape albe și negre și poate fi acustic sau digital?", a: ["Pianul", "Vioara", "Flautul", "Trompeta"] },
+  { id: "mz27", c: "Muzică", q: "Cum se numește persoana care conduce o orchestră?", a: ["Dirijor", "Solist", "Compozitor", "Regizor"] },
+  { id: "mz28", c: "Muzică", q: "Din ce țară provine flamenco?", a: ["Spania", "Portugalia", "Italia", "Grecia"] },
+  { id: "mz29", c: "Muzică", q: "Ce familie de instrumente include trompeta?", a: ["Suflători de alamă", "Coarde", "Percuție", "Clape"] },
+  { id: "mz30", c: "Muzică", q: "Câte note are gama diatonică uzuală?", a: ["7", "5", "8", "12"] },
+  { id: "mz31", c: "Muzică", q: "Ce instrument este asociat în mod tradițional cu muzica reggae?", a: ["Chitara bas", "Harpa", "Oboiul", "Țambalul"] },
+  { id: "mz32", c: "Muzică", q: "Cum se numește interpretarea muzicală fără acompaniament instrumental?", a: ["A cappella", "Solo instrumental", "Duet", "Orchestră"] },
+  { id: "mz33", c: "Muzică", q: "Ce termen indică viteza unei piese muzicale?", a: ["Tempo", "Armonie", "Timbru", "Dinamică"] },
+  { id: "mz34", c: "Muzică", q: "Ce instrument tradițional românesc are corzi lovite cu ciocănele?", a: ["Țambalul", "Cavalul", "Naiul", "Buciumul"] },
+  { id: "an25", c: "Animale", q: "Ce animal este cel mai mare mamifer de pe Pământ?", a: ["Balena albastră", "Elefantul african", "Girafa", "Rechinul-balenă"] },
+  { id: "an26", c: "Animale", q: "Cum se numește puiul broaștei?", a: ["Mormoloc", "Larvă", "Puișor", "Nimfă"] },
+  { id: "an27", c: "Animale", q: "Ce pasăre poate imita foarte bine sunetele auzite?", a: ["Papagalul", "Pinguinul", "Struțul", "Barza"] },
+  { id: "an28", c: "Animale", q: "Ce animal este cunoscut pentru dungile sale alb-negre?", a: ["Zebra", "Ghepardul", "Leopardul", "Hiena"] },
+  { id: "an29", c: "Animale", q: "Cum respiră peștii în apă?", a: ["Prin branhii", "Prin plămâni", "Prin piele", "Prin solzi"] },
+  { id: "an30", c: "Animale", q: "Ce mamifer depune ouă?", a: ["Ornitorincul", "Delfinul", "Liliacul", "Cangurul"] },
+  { id: "an31", c: "Animale", q: "Cum se numește grupul de lupi?", a: ["Haită", "Turmă", "Cireadă", "Stol"] },
+  { id: "an32", c: "Animale", q: "Ce animal își schimbă culoarea pentru camuflaj?", a: ["Cameleonul", "Ursul polar", "Vulpea", "Castorul"] },
+  { id: "an33", c: "Animale", q: "Care este cel mai rapid animal terestru?", a: ["Ghepardul", "Leul", "Calul", "Antilopa gnu"] },
+  { id: "an34", c: "Animale", q: "Ce insectă produce miere?", a: ["Albina", "Viespea", "Furnica", "Libelula"] },
+  { id: "st25", c: "Știință", q: "Ce planetă este cunoscută drept Planeta Roșie?", a: ["Marte", "Venus", "Jupiter", "Mercur"] },
+  { id: "st26", c: "Știință", q: "Care este formula chimică a apei?", a: ["H₂O", "CO₂", "O₂", "NaCl"] },
+  { id: "st27", c: "Știință", q: "Ce organ pompează sângele în corpul uman?", a: ["Inima", "Plămânul", "Ficatul", "Rinichiul"] },
+  { id: "st28", c: "Știință", q: "Cum se numește centrul unui atom?", a: ["Nucleu", "Electron", "Moleculă", "Izotop"] },
+  { id: "st29", c: "Știință", q: "Ce forță ne menține pe suprafața Pământului?", a: ["Gravitația", "Frecarea", "Magnetismul", "Presiunea"] },
+  { id: "st30", c: "Știință", q: "Ce vitamină poate fi produsă de piele cu ajutorul luminii solare?", a: ["Vitamina D", "Vitamina C", "Vitamina B12", "Vitamina K"] },
+  { id: "st31", c: "Știință", q: "La ce temperatură fierbe apa pură la nivelul mării?", a: ["100°C", "90°C", "80°C", "120°C"] },
+  { id: "st32", c: "Știință", q: "Ce gaz absorb plantele în fotosinteză?", a: ["Dioxid de carbon", "Oxigen", "Azot", "Hidrogen"] },
+  { id: "st33", c: "Știință", q: "Care este unitatea de măsură pentru frecvență?", a: ["Hertz", "Newton", "Joule", "Pascal"] },
+  { id: "st34", c: "Știință", q: "Ce parte a celulei conține în mod obișnuit materialul genetic?", a: ["Nucleul", "Membrana", "Citoplasma", "Ribozomul"] },
+  { id: "th25", c: "Tehnologie", q: "Ce înseamnă abrevierea CPU?", a: ["Unitate centrală de procesare", "Unitate de stocare", "Placă video", "Memorie externă"] },
+  { id: "th26", c: "Tehnologie", q: "Ce companie dezvoltă sistemul de operare Windows?", a: ["Microsoft", "Apple", "Google", "Samsung"] },
+  { id: "th27", c: "Tehnologie", q: "Ce dispozitiv este folosit pentru conectarea la o rețea Wi-Fi?", a: ["Adaptor wireless", "Scanner", "Imprimantă", "Proiector"] },
+  { id: "th28", c: "Tehnologie", q: "Ce extensie este asociată în mod obișnuit imaginilor JPEG?", a: [".jpg", ".mp3", ".exe", ".txt"] },
+  { id: "th29", c: "Tehnologie", q: "Cum se numește memoria temporară de lucru a calculatorului?", a: ["RAM", "SSD", "ROM", "GPU"] },
+  { id: "th30", c: "Tehnologie", q: "Ce reprezintă URL?", a: ["Adresa unei resurse pe internet", "Un tip de procesor", "Un format audio", "O placă de bază"] },
+  { id: "th31", c: "Tehnologie", q: "Ce companie produce telefoanele iPhone?", a: ["Apple", "Huawei", "Xiaomi", "Sony"] },
+  { id: "th32", c: "Tehnologie", q: "Ce componentă este specializată în procesarea graficii?", a: ["GPU", "CPU", "RAM", "Sursă"] },
+  { id: "th33", c: "Tehnologie", q: "Ce este Bluetooth?", a: ["Tehnologie de comunicare fără fir pe distanță scurtă", "Un sistem de operare", "Un browser", "Un cablu video"] },
+  { id: "th34", c: "Tehnologie", q: "Ce înseamnă „open source” pentru un program?", a: ["Codul sursă este disponibil pentru consultare și modificare", "Programul funcționează doar offline", "Este obligatoriu gratuit", "Nu poate fi actualizat"] },
+  { id: "ga25", c: "Gastronomie", q: "Din ce ingredient se prepară în principal hummusul?", a: ["Năut", "Linte", "Fasole roșie", "Cartofi"] },
+  { id: "ga26", c: "Gastronomie", q: "Ce brânză este folosită tradițional în salata grecească?", a: ["Feta", "Mozzarella", "Gouda", "Cheddar"] },
+  { id: "ga27", c: "Gastronomie", q: "Care este ingredientul principal al guacamole-ului?", a: ["Avocado", "Castravete", "Dovlecel", "Mazăre"] },
+  { id: "ga28", c: "Gastronomie", q: "Ce tip de paste au formă de fundițe?", a: ["Farfalle", "Penne", "Fusilli", "Rigatoni"] },
+  { id: "ga29", c: "Gastronomie", q: "Din ce se obține tofu?", a: ["Soia", "Orez", "Porumb", "Ovăz"] },
+  { id: "ga30", c: "Gastronomie", q: "Ce condiment oferă culoarea galbenă specifică curry-ului?", a: ["Turmeric", "Scorțișoară", "Cuișoare", "Rozmarin"] },
+  { id: "ga31", c: "Gastronomie", q: "Ce desert italian se prepară de obicei cu cafea și mascarpone?", a: ["Tiramisu", "Panna cotta", "Cannoli", "Gelato"] },
+  { id: "ga32", c: "Gastronomie", q: "Care este ingredientul de bază al mămăligii?", a: ["Mălai", "Făină de grâu", "Orez", "Cartofi"] },
+  { id: "ga33", c: "Gastronomie", q: "Ce fruct este ingredientul principal al sorbetului de lămâie?", a: ["Lămâia", "Portocala", "Mărul", "Piersica"] },
+  { id: "ga34", c: "Gastronomie", q: "Ce fel de aliment este parmezanul?", a: ["Brânză maturată", "Mezel", "Pâine", "Dulceață"] },
+  { id: "la25", c: "Literatură și Artă", q: "Cine a scris romanul „Moromeții”?", a: ["Marin Preda", "Liviu Rebreanu", "Mihail Sadoveanu", "Camil Petrescu"] },
+  { id: "la26", c: "Literatură și Artă", q: "Cine a pictat „Noaptea înstelată”?", a: ["Vincent van Gogh", "Claude Monet", "Pablo Picasso", "Salvador Dalí"] },
+  { id: "la27", c: "Literatură și Artă", q: "Cine a scris „Micul Prinț”?", a: ["Antoine de Saint-Exupéry", "Jules Verne", "Victor Hugo", "Albert Camus"] },
+  { id: "la28", c: "Literatură și Artă", q: "Ce curent artistic este asociat cu Salvador Dalí?", a: ["Suprarealismul", "Impresionismul", "Cubismul", "Barocul"] },
+  { id: "la29", c: "Literatură și Artă", q: "Cine a sculptat „Gânditorul” de la Hamangia?", a: ["Autor necunoscut din cultura Hamangia", "Constantin Brâncuși", "Auguste Rodin", "Donatello"] },
+  { id: "la30", c: "Literatură și Artă", q: "Cine a scris piesa „O scrisoare pierdută”?", a: ["Ion Luca Caragiale", "Mihai Eminescu", "Tudor Arghezi", "Lucian Blaga"] },
+  { id: "la31", c: "Literatură și Artă", q: "Cum se numește arta plierii hârtiei?", a: ["Origami", "Caligrafie", "Mozaic", "Gravură"] },
+  { id: "la32", c: "Literatură și Artă", q: "Cine a creat personajul Don Quijote?", a: ["Miguel de Cervantes", "William Shakespeare", "Dante Alighieri", "Goethe"] },
+  { id: "la33", c: "Literatură și Artă", q: "Ce instrument este asociat cu sculptorul Constantin Brâncuși?", a: ["Coloana fără sfârșit", "David", "Discobolul", "Venus din Milo"] },
+  { id: "la34", c: "Literatură și Artă", q: "Cine a scris „Amintiri din copilărie”?", a: ["Ion Creangă", "Ioan Slavici", "Barbu Ștefănescu Delavrancea", "George Coșbuc"] },
+  { id: "ro25", c: "România", q: "În ce an a avut loc Marea Unire?", a: ["1918", "1859", "1877", "1940"] },
+  { id: "ro26", c: "România", q: "Care este cel mai înalt vârf din România?", a: ["Moldoveanu", "Negoiu", "Omu", "Peleaga"] },
+  { id: "ro27", c: "România", q: "Ce fluviu formează o mare parte din granița sudică a României?", a: ["Dunărea", "Mureșul", "Oltul", "Prutul"] },
+  { id: "ro28", c: "România", q: "În ce județ se află Castelul Corvinilor?", a: ["Hunedoara", "Brașov", "Sibiu", "Alba"] },
+  { id: "ro29", c: "România", q: "Ce poet a scris „Luceafărul”?", a: ["Mihai Eminescu", "George Bacovia", "Vasile Alecsandri", "Nichita Stănescu"] },
+  { id: "ro30", c: "România", q: "Care este moneda oficială a României?", a: ["Leul", "Euro", "Dolarul", "Coroana"] },
+  { id: "ro31", c: "România", q: "Ce oraș este cunoscut drept „Mica Vienă” a României?", a: ["Timișoara", "Iași", "Craiova", "Ploiești"] },
+  { id: "ro32", c: "România", q: "În ce regiune istorică se află Suceava?", a: ["Bucovina", "Oltenia", "Dobrogea", "Banat"] },
+  { id: "ro33", c: "România", q: "Ce mare se învecinează cu litoralul României?", a: ["Marea Neagră", "Marea Egee", "Marea Adriatică", "Marea Caspică"] },
+  { id: "ro34", c: "România", q: "Cine a fost primul domnitor al Principatelor Unite?", a: ["Alexandru Ioan Cuza", "Carol I", "Mihail Kogălniceanu", "Ferdinand I"] },
+  { id: "mt25", c: "Mitologie", q: "Cine era zeul grec al mării?", a: ["Poseidon", "Ares", "Hermes", "Apollo"] },
+  { id: "mt26", c: "Mitologie", q: "Cum se numește ciocanul lui Thor în mitologia nordică?", a: ["Mjölnir", "Gungnir", "Excalibur", "Gram"] },
+  { id: "mt27", c: "Mitologie", q: "Cine era zeița înțelepciunii în mitologia greacă?", a: ["Atena", "Afrodita", "Hera", "Demetra"] },
+  { id: "mt28", c: "Mitologie", q: "Ce creatură mitologică avea corp de leu și cap de om?", a: ["Sfinxul", "Centaurul", "Minotaurul", "Hidra"] },
+  { id: "mt29", c: "Mitologie", q: "Cine era zeul egiptean al lumii de dincolo?", a: ["Osiris", "Ra", "Anubis", "Horus"] },
+  { id: "mt30", c: "Mitologie", q: "Cum se numea calul înaripat din mitologia greacă?", a: ["Pegas", "Cerber", "Grifon", "Chiron"] },
+  { id: "mt31", c: "Mitologie", q: "Cine a furat focul pentru oameni în mitologia greacă?", a: ["Prometeu", "Atlas", "Perseu", "Hercule"] },
+  { id: "mt32", c: "Mitologie", q: "Câte capete avea Cerber, în reprezentarea clasică?", a: ["3", "2", "5", "7"] },
+  { id: "mt33", c: "Mitologie", q: "Ce erou grec a învins Minotaurul?", a: ["Tezeu", "Ahile", "Odiseu", "Iason"] },
+  { id: "mt34", c: "Mitologie", q: "Cine era zeul roman al războiului?", a: ["Marte", "Neptun", "Mercur", "Saturn"] },
+  { id: "ai25", c: "Auto și Invenții", q: "Ce companie produce automobilele cu marca Mustang?", a: ["Ford", "Chevrolet", "Dodge", "Toyota"] },
+  { id: "ai26", c: "Auto și Invenții", q: "Ce tip de motor folosește aprinderea prin comprimare?", a: ["Diesel", "Benzină", "Electric", "Hibrid serie"] },
+  { id: "ai27", c: "Auto și Invenții", q: "Cine este asociat cu inventarea motorului diesel?", a: ["Rudolf Diesel", "Nikolaus Otto", "Henry Ford", "Karl Benz"] },
+  { id: "ai28", c: "Auto și Invenții", q: "Ce indică abrevierea ABS la automobile?", a: ["Sistem antiblocare la frânare", "Sistem automat de bord", "Asistență la schimbarea vitezei", "Airbag suplimentar"] },
+  { id: "ai29", c: "Auto și Invenții", q: "Ce companie a creat modelul Beetle, cunoscut ca „Broscuța”?", a: ["Volkswagen", "Fiat", "Renault", "Peugeot"] },
+  { id: "ai30", c: "Auto și Invenții", q: "Ce invenție este asociată fraților Wright?", a: ["Avionul cu motor practic", "Telefonul", "Radioul", "Automobilul electric"] },
+  { id: "ai31", c: "Auto și Invenții", q: "Ce tip de energie folosește un automobil electric pentru propulsie?", a: ["Energie electrică din baterie", "Abur", "Benzină", "Hidrogen lichid în toate cazurile"] },
+  { id: "ai32", c: "Auto și Invenții", q: "Ce înseamnă GPS?", a: ["Sistem de poziționare globală", "Sistem de protecție solară", "Generator de presiune standard", "Ghid de parcare sigură"] },
+  { id: "ai33", c: "Auto și Invenții", q: "Ce companie produce automobilele Corolla?", a: ["Toyota", "Honda", "Nissan", "Mazda"] },
+  { id: "ai34", c: "Auto și Invenții", q: "Ce dispozitiv transformă energia electrică în mișcare mecanică?", a: ["Motorul electric", "Alternatorul", "Radiatorul", "Convertorul catalitic"] }
+
+];
+
+// 10 Palete de culori neon distincte pentru până la 10 jucători
+const PLAYER_PALETTES = [
+ { name: "Cyan Electric", bg: "linear-gradient(135deg, #0078a6 0%, #004766 100%)", solid: "#00c8ff" },
+ { name: "Roșu Rubin", bg: "linear-gradient(135deg, #c61a3c 0%, #6e0b22 100%)", solid: "#ff2a55" },
+ { name: "Smarald Neon", bg: "linear-gradient(135deg, #099c56 0%, #04542e 100%)", solid: "#00e676" },
+ { name: "Violet Imperial", bg: "linear-gradient(135deg, #7c1fd1 0%, #440d78 100%)", solid: "#b35cff" },
+ { name: "Portocaliu Solar", bg: "linear-gradient(135deg, #d95b00 0%, #7a3100 100%)", solid: "#ff8800" },
+ { name: "Magenta Show", bg: "linear-gradient(135deg, #b8147e 0%, #630842 100%)", solid: "#ff40b5" },
+ { name: "Albastru Regal", bg: "linear-gradient(135deg, #1e4bd1 0%, #0f2775 100%)", solid: "#4d7cff" },
+ { name: "Turcoaz Marin", bg: "linear-gradient(135deg, #00897b 0%, #004d40 100%)", solid: "#1de9b6" },
+ { name: "Auriu Imperial", bg: "linear-gradient(135deg, #b58900 0%, #634900 100%)", solid: "#ffd54f" },
+ { name: "Lime Electric", bg: "linear-gradient(135deg, #558b2f 0%, #2e5214 100%)", solid: "#aeea00" }
+];
+
+const DEMO_NAMES = ["Andrei", "Maria", "Vlad", "Ioana", "Mihai", "Elena", "Radu", "Diana", "Cristi", "Alexia"];
+const ALL_CATEGORIES = [...new Set(QUESTION_BANK.map(q => q.c))];
+const MIN_PLAYERS = 2;
+const MAX_PLAYERS = 10;
+const DUEL_PLAYER_TIME_MS = 60000; // 1 minut (60s) pentru FIECARE jucător
+const STORAGE_KEY = "the_floor_home_edition_state_v4";
+
+// Starea pentru ecranul de configurare
+let setupPlayerCount = 4;
+let setupSavedNames = [...DEMO_NAMES];
+
+// Calculează automat dimensiunea optimă a grilei (conectată complet) pentru orice număr total de teritorii (2..40)
+function getGridDimensions(totalTiles) {
+ if (totalTiles <= 3) return { cols: totalTiles, rows: 1 };
+ let bestCols = Math.ceil(Math.sqrt(totalTiles));
+ let bestRows = Math.ceil(totalTiles / bestCols);
+ let bestScore = Infinity;
+
+ for (let rows = 2; rows <= 6; rows++) {
+  const cols = Math.ceil(totalTiles / rows);
+  if (cols < rows) continue;
+  if (cols > 10) continue;
+  const emptyCells = cols * rows - totalTiles;
+  const lastRowItems = totalTiles - (rows - 1) * cols;
+  if (lastRowItems <= 0) continue; // garantează că toate teritoriile sunt conectate pe rânduri
+  const ratioDiff = Math.abs((cols / rows) - 1.85);
+  const score = emptyCells * 2.4 + ratioDiff * 2.0;
+  if (score < bestScore) {
+   bestScore = score;
+   bestCols = cols;
+   bestRows = rows;
+  }
+ }
+ return { cols: bestCols, rows: bestRows };
+}
+
+/* =========================================================================
+   SISTEM AUDIO SINTETIZAT (100% OFFLINE CU WEB AUDIO API)
+   ========================================================================= */
+const SoundFX = {
+ enabled: true,
+ ctx: null,
+ init() {
+  if (!this.ctx) {
+   const AudioCtx = window.AudioContext || window.webkitAudioContext;
+   if (AudioCtx) this.ctx = new AudioCtx();
+  }
+  if (this.ctx && this.ctx.state === "suspended") {
+   this.ctx.resume();
+  }
+ },
+ tone(freq, duration = 0.12, type = "sine", vol = 0.12, delay = 0) {
+  if (!this.enabled) return;
+  try {
+   this.init();
+   if (!this.ctx) return;
+   const now = this.ctx.currentTime + delay;
+   const osc = this.ctx.createOscillator();
+   const gain = this.ctx.createGain();
+   osc.type = type;
+   osc.frequency.setValueAtTime(freq, now);
+   gain.gain.setValueAtTime(vol, now);
+   gain.gain.exponentialRampToValueAtTime(0.0001, now + duration);
+   osc.connect(gain);
+   gain.connect(this.ctx.destination);
+   osc.start(now);
+   osc.stop(now + duration);
+  } catch (_) {}
+ },
+ click() { this.tone(520, 0.07, "triangle", 0.09); },
+ tick(urgent = false) { this.tone(urgent ? 880 : 620, 0.045, "sine", urgent ? 0.09 : 0.04); },
+ correct() {
+  this.tone(523.25, 0.11, "triangle", 0.14, 0);
+  this.tone(659.25, 0.14, "triangle", 0.14, 0.08);
+  this.tone(783.99, 0.22, "triangle", 0.15, 0.16);
+ },
+ wrong() {
+  this.tone(210, 0.18, "sawtooth", 0.14, 0);
+  this.tone(160, 0.26, "sawtooth", 0.15, 0.12);
+ },
+ duelStart() {
+  this.tone(330, 0.12, "triangle", 0.14, 0);
+  this.tone(440, 0.12, "triangle", 0.14, 0.1);
+  this.tone(660, 0.28, "triangle", 0.16, 0.2);
+ },
+ victory() {
+  [523.25, 659.25, 783.99, 1046.5].forEach((f, idx) => {
+   this.tone(f, 0.26, "triangle", 0.15, idx * 0.12);
+  });
+ }
+};
+
+/* =========================================================================
+   STAREA JOCULUI
+   ========================================================================= */
+let state = {
+ phase: "setup", // 'setup' | 'board' | 'victory'
+ conquestMode: "all", // 'all' | 'single'
+ territoriesPerPlayer: 1,
+ gridCols: 5,
+ gridRows: 2,
+ players: [], // { id, name, colorIdx }
+ territories: [], // { index, ownerId, category }
+ usedQuestionIds: [],
+ duelsPlayed: 0,
+ questionsAnswered: 0,
+ winnerName: null
+};
+
+let selectedAttackerTile = null;
+let pendingDuel = null;
+let activeDuel = null;
+let randomizerBusy = false;
+
+/* =========================================================================
+   UTILITARE
+   ========================================================================= */
+function shuffleArray(arr) {
+ const copy = [...arr];
+ for (let i = copy.length - 1; i > 0; i--) {
+  const j = Math.floor(Math.random() * (i + 1));
+  [copy[i], copy[j]] = [copy[j], copy[i]];
+ }
+ return copy;
+}
+
+function areTilesAdjacent(idxA, idxB) {
+ const cols = state.gridCols;
+ const r1 = Math.floor(idxA / cols), c1 = idxA % cols;
+ const r2 = Math.floor(idxB / cols), c2 = idxB % cols;
+ return Math.abs(r1 - r2) + Math.abs(c1 - c2) === 1;
+}
+
+function getAdjacentTiles(idx) {
+ const total = state.territories.length;
+ const res = [];
+ for (let i = 0; i < total; i++) {
+  if (i !== idx && areTilesAdjacent(idx, i)) res.push(i);
+ }
+ return res;
+}
+
+function getPlayerById(id) {
+ return state.players.find(p => p.id === id);
+}
+
+function showToast(msg) {
+ const el = document.getElementById("toast-msg");
+ el.textContent = msg;
+ el.classList.add("show");
+ clearTimeout(showToast._t);
+ showToast._t = setTimeout(() => el.classList.remove("show"), 2600);
+}
+
+function saveState() {
+ try {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+ } catch (_) {}
+}
+
+function loadState() {
+ try {
+  const raw = localStorage.getItem(STORAGE_KEY);
+  if (!raw) return false;
+  const parsed = JSON.parse(raw);
+  if (
+   parsed &&
+   Array.isArray(parsed.territories) &&
+   parsed.territories.length >= 2 &&
+   parsed.gridCols &&
+   parsed.gridRows &&
+   Array.isArray(parsed.players)
+  ) {
+   state = parsed;
+   return true;
+  }
+ } catch (_) {}
+ return false;
+}
+
+function switchScreen(screenId) {
+ document.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+ document.getElementById(screenId).classList.add("active");
+}
+
+/* =========================================================================
+   ECRAN 1: CONFIGURARE JUCĂTORI CU BUTON "+" ȘI SELECȚIE TERITORII
+   ========================================================================= */
+function syncCurrentTypedNames() {
+ const inputs = document.querySelectorAll("#players-inputs-grid input[data-player-idx]");
+ inputs.forEach(inp => {
+  const idx = parseInt(inp.dataset.playerIdx, 10);
+  if (!isNaN(idx)) {
+   setupSavedNames[idx] = inp.value;
+  }
+ });
+}
+
+function changePlayerCount(delta) {
+ syncCurrentTypedNames();
+ const next = Math.max(MIN_PLAYERS, Math.min(MAX_PLAYERS, setupPlayerCount + delta));
+ if (next === setupPlayerCount) return;
+ SoundFX.click();
+ setupPlayerCount = next;
+ renderSetupInputs();
+}
+
+function removeSpecificPlayerSlot(slotIdx) {
+ if (setupPlayerCount <= MIN_PLAYERS) {
+  showToast("Sunt necesari minimum 2 jucători!");
+  return;
+ }
+ syncCurrentTypedNames();
+ SoundFX.click();
+ setupSavedNames.splice(slotIdx, 1);
+ setupSavedNames.push(DEMO_NAMES[setupSavedNames.length % DEMO_NAMES.length] || "");
+ setupPlayerCount--;
+ renderSetupInputs();
+}
+
+function renderSetupInputs() {
+ syncCurrentTypedNames();
+ const grid = document.getElementById("players-inputs-grid");
+ const terrPerPlayer = parseInt(document.getElementById("territories-per-player-select").value, 10);
+ const totalTerr = setupPlayerCount * terrPerPlayer;
+
+ document.getElementById("player-count-display").textContent =
+  `${setupPlayerCount} Jucători (${totalTerr} teritorii)`;
+ document.getElementById("btn-player-minus").disabled = setupPlayerCount <= MIN_PLAYERS;
+ document.getElementById("btn-player-plus").disabled = setupPlayerCount >= MAX_PLAYERS;
+
+ grid.innerHTML = "";
+ const terrLabel = terrPerPlayer === 1 ? "1 teritoriu" : `${terrPerPlayer} teritorii`;
+
+ for (let i = 0; i < setupPlayerCount; i++) {
+  const pal = PLAYER_PALETTES[i];
+  const val = setupSavedNames[i] !== undefined ? setupSavedNames[i] : "";
+  const card = document.createElement("div");
+  card.className = "player-input-card";
+  card.innerHTML = `
+   <div class="player-color-strip" style="background:${pal.solid}"></div>
+   <div class="player-card-label">
+    <span>Jucător ${i + 1} (${terrLabel})</span>
+    <span class="card-right-tools">
+     <span class="color-dot" style="background:${pal.solid}; box-shadow: 0 0 8px ${pal.solid}"></span>
+     ${setupPlayerCount > MIN_PLAYERS ? `<button type="button" class="btn-remove-player" data-remove="${i}" title="Elimină acest slot">×</button>` : ""}
+    </span>
+   </div>
+   <input type="text" data-player-idx="${i}" maxlength="18" placeholder="Nume Jucător ${i + 1}" value="${val.replace(/"/g, '&quot;')}">
+  `;
+  grid.appendChild(card);
+ }
+
+ // Card cu buton "+" direct în grilă dacă nu s-a atins limita de 10 jucători
+ if (setupPlayerCount < MAX_PLAYERS) {
+  const addCard = document.createElement("div");
+  addCard.className = "add-player-card";
+  addCard.title = "Apasă pentru a adăuga încă un jucător";
+  addCard.innerHTML = `
+   <div class="add-player-plus">+</div>
+   <div class="add-player-lbl">Adaugă Jucător (${setupPlayerCount + 1}/${MAX_PLAYERS})</div>
+  `;
+  addCard.addEventListener("click", () => changePlayerCount(1));
+  grid.appendChild(addCard);
+ }
+
+ grid.querySelectorAll(".btn-remove-player").forEach(btn => {
+  btn.addEventListener("click", (e) => {
+   e.stopPropagation();
+   removeSpecificPlayerSlot(parseInt(btn.dataset.remove, 10));
+  });
+ });
+}
+
+function autofillDemoNames() {
+ SoundFX.click();
+ for (let i = 0; i < MAX_PLAYERS; i++) {
+  setupSavedNames[i] = DEMO_NAMES[i];
+ }
+ const inputs = document.querySelectorAll("#players-inputs-grid input[data-player-idx]");
+ inputs.forEach(inp => {
+  const idx = parseInt(inp.dataset.playerIdx, 10);
+  inp.value = DEMO_NAMES[idx] || `Jucător ${idx + 1}`;
+ });
+}
+
+function startNewGameFromSetup() {
+ SoundFX.init();
+ syncCurrentTypedNames();
+
+ const count = setupPlayerCount;
+ const terrPerPlayer = parseInt(document.getElementById("territories-per-player-select").value, 10);
+ const conquestMode = document.getElementById("conquest-mode-select").value;
+
+ const names = [];
+ for (let i = 0; i < count; i++) {
+  const raw = (setupSavedNames[i] || "").trim();
+  names.push(raw || `Jucător ${i + 1}`);
+ }
+
+ const uniqueCheck = new Set(names.map(n => n.toLowerCase()));
+ if (uniqueCheck.size !== names.length) {
+  showToast("⚠️ Te rugăm să folosești nume diferite pentru fiecare jucător!");
+  SoundFX.wrong();
+  return;
+ }
+
+ const players = names.map((name, idx) => ({
+  id: idx,
+  name,
+  colorIdx: idx
+ }));
+
+ const totalTerritories = count * terrPerPlayer;
+ const { cols, rows } = getGridDimensions(totalTerritories);
+
+ // Distribuim exact `terrPerPlayer` teritorii pentru fiecare jucător, amestecate pe tablă
+ const ownerPool = [];
+ players.forEach(p => {
+  for (let k = 0; k < terrPerPlayer; k++) {
+   ownerPool.push(p.id);
+  }
+ });
+ const shuffledOwners = shuffleArray(ownerPool);
+
+ // Alocăm categoriile echilibrat pe toate teritoriile
+ let categoryPool = [];
+ while (categoryPool.length < totalTerritories) {
+  categoryPool = categoryPool.concat(shuffleArray(ALL_CATEGORIES));
+ }
+
+ const territories = [];
+ for (let t = 0; t < totalTerritories; t++) {
+  territories.push({
+   index: t,
+   ownerId: shuffledOwners[t],
+   category: categoryPool[t]
+  });
+ }
+
+ state = {
+  phase: "board",
+  conquestMode,
+  territoriesPerPlayer: terrPerPlayer,
+  gridCols: cols,
+  gridRows: rows,
+  players,
+  territories,
+  usedQuestionIds: [],
+  duelsPlayed: 0,
+  questionsAnswered: 0,
+  winnerName: null
+ };
+
+ selectedAttackerTile = null;
+ stopConfetti();
+ saveState();
+ SoundFX.duelStart();
+ renderBoardScreen();
+ switchScreen("screen-board");
+}
+
+/* =========================================================================
+   ECRAN 2: TABLA DE JOC
+   ========================================================================= */
+function getValidEnemyNeighborTilesForOwner(ownerId) {
+ const ownedIndices = state.territories.filter(t => t.ownerId === ownerId).map(t => t.index);
+ const enemySet = new Set();
+ ownedIndices.forEach(idx => {
+  getAdjacentTiles(idx).forEach(adj => {
+   if (state.territories[adj].ownerId !== ownerId) {
+    enemySet.add(adj);
+   }
+  });
+ });
+ return Array.from(enemySet);
+}
+
+function hasAnyPossibleDuel() {
+ const total = state.territories.length;
+ for (let i = 0; i < total; i++) {
+  const ownerA = state.territories[i].ownerId;
+  for (const adj of getAdjacentTiles(i)) {
+   if (state.territories[adj].ownerId !== ownerA) return true;
+  }
+ }
+ return false;
+}
+
+function renderBoardScreen() {
+ const gridEl = document.getElementById("the-floor-grid");
+ const instructionEl = document.getElementById("board-instruction");
+ const clearBtn = document.getElementById("btn-clear-selection");
+ const duelBadge = document.getElementById("duel-counter-badge");
+ const qLeftEl = document.getElementById("questions-left-indicator");
+ const modeTextEl = document.getElementById("mode-indicator-text");
+ const objTextEl = document.getElementById("objective-count-text");
+
+ const totalTiles = state.territories.length;
+
+ gridEl.style.setProperty("--grid-cols", state.gridCols);
+ gridEl.style.setProperty("--grid-rows", state.gridRows);
+ gridEl.classList.toggle("compact-tiles", totalTiles > 18);
+
+ objTextEl.textContent = `${totalTiles} / ${totalTiles} teritorii`;
+ duelBadge.textContent = `Duel #${state.duelsPlayed + 1}`;
+ const remainingQ = Math.max(0, QUESTION_BANK.length - state.usedQuestionIds.length);
+ qLeftEl.textContent = `Întrebări nefolosite: ${remainingQ} / ${QUESTION_BANK.length}`;
+ modeTextEl.textContent = state.conquestMode === "all"
+  ? "Mod: Format TV (cucerești tot teritoriul)"
+  : "Mod: Doar teritoriul disputat";
+
+ let selectedOwnerId = selectedAttackerTile !== null ? state.territories[selectedAttackerTile].ownerId : null;
+ let validTargets = selectedOwnerId !== null ? getValidEnemyNeighborTilesForOwner(selectedOwnerId) : [];
+
+ if (selectedOwnerId !== null) {
+  const attackerPlayer = getPlayerById(selectedOwnerId);
+  instructionEl.innerHTML = `Atacator selectat: <strong style="color:var(--neon-cyan)">${escapeHtml(attackerPlayer.name)}</strong> — Alege un teritoriu vecin evidențiat cu aur!`;
+  clearBtn.style.display = "inline-flex";
+ } else {
+  instructionEl.textContent = "Selectează un teritoriu atacator de pe tablă sau apasă „Randomizer Atacator”!";
+  clearBtn.style.display = "none";
+ }
+
+ gridEl.innerHTML = "";
+ state.territories.forEach(tile => {
+  const owner = getPlayerById(tile.ownerId);
+  const pal = PLAYER_PALETTES[owner.colorIdx];
+  const isSelectedTile = tile.index === selectedAttackerTile;
+  const isSameOwner = selectedOwnerId !== null && tile.ownerId === selectedOwnerId;
+  const isTarget = validTargets.includes(tile.index);
+  const isDimmed = selectedOwnerId !== null && !isSameOwner && !isTarget;
+
+  const div = document.createElement("div");
+  div.className = "territory-tile" +
+   (isSelectedTile ? " selected-attacker" : "") +
+   (!isSelectedTile && isSameOwner ? " same-owner-highlight" : "") +
+   (isTarget ? " valid-target" : "") +
+   (isDimmed ? " dimmed" : "");
+  div.dataset.index = tile.index;
+  div.style.background = pal.bg;
+  div.style.borderColor = pal.solid;
+
+  let badgeHtml = "";
+  let hintHtml = "";
+  if (isSelectedTile || isSameOwner) {
+   badgeHtml = `<span class="tile-role-badge badge-attacker">⚔ Atac</span>`;
+   hintHtml = `<span class="tile-hint">Teritoriul lui ${escapeHtml(owner.name)}</span>`;
+  } else if (isTarget) {
+   badgeHtml = `<span class="tile-role-badge badge-target">🎯 Duel!</span>`;
+   hintHtml = `<span class="tile-hint">Clic pt. „${escapeHtml(tile.category)}”</span>`;
+  } else {
+   hintHtml = `<span class="tile-hint">Clic pentru a ataca</span>`;
+  }
+
+  div.innerHTML = `
+   <div class="tile-top">
+    <span class="tile-number">T${tile.index + 1}</span>
+    ${badgeHtml}
+   </div>
+   <div class="tile-center">
+    <div class="tile-owner-name" title="${escapeHtml(owner.name)}">${escapeHtml(owner.name)}</div>
+    <div class="tile-category" title="${escapeHtml(tile.category)}">${escapeHtml(tile.category)}</div>
+   </div>
+   <div class="tile-bottom">
+    ${hintHtml}
+   </div>
+  `;
+
+  div.addEventListener("click", () => onTileClicked(tile.index));
+  gridEl.appendChild(div);
+ });
+
+ renderStandings(selectedOwnerId);
+}
+
+function renderStandings(selectedOwnerId) {
+ const listEl = document.getElementById("standings-list");
+ listEl.innerHTML = "";
+ const totalTiles = state.territories.length;
+
+ const counts = {};
+ state.players.forEach(p => { counts[p.id] = 0; });
+ state.territories.forEach(t => { counts[t.ownerId] = (counts[t.ownerId] || 0) + 1; });
+
+ const sorted = [...state.players].sort((a, b) => counts[b.id] - counts[a.id]);
+ sorted.forEach(player => {
+  const pal = PLAYER_PALETTES[player.colorIdx];
+  const c = counts[player.id];
+  const item = document.createElement("div");
+  item.className = "standing-item" + (c === 0 ? " eliminated" : "");
+  if (selectedOwnerId === player.id) {
+   item.style.borderColor = "#ffffff";
+   item.style.boxShadow = "0 0 14px rgba(255,255,255,0.28)";
+  }
+  item.innerHTML = `
+   <div class="standing-left">
+    <span class="standing-swatch" style="background:${pal.solid}"></span>
+    <span>${escapeHtml(player.name)}</span>
+   </div>
+   <span class="standing-count">${c} / ${totalTiles}</span>
+  `;
+  if (c > 0) {
+   item.addEventListener("click", () => {
+    if (randomizerBusy) return;
+    const ownedWithEnemy = state.territories.find(
+     t => t.ownerId === player.id && getAdjacentTiles(t.index).some(adj => state.territories[adj].ownerId !== player.id)
+    ) || state.territories.find(t => t.ownerId === player.id);
+
+    if (ownedWithEnemy) {
+     SoundFX.click();
+     selectedAttackerTile = ownedWithEnemy.index;
+     renderBoardScreen();
+    }
+   });
+  }
+  listEl.appendChild(item);
+ });
+}
+
+function onTileClicked(tileIdx) {
+ if (randomizerBusy) return;
+ const clickedTile = state.territories[tileIdx];
+
+ if (selectedAttackerTile === null) {
+  const targets = getValidEnemyNeighborTilesForOwner(clickedTile.ownerId);
+  if (targets.length === 0) {
+   showToast("Acest jucător nu are vecini adversari!");
+   return;
+  }
+  SoundFX.click();
+  selectedAttackerTile = tileIdx;
+  renderBoardScreen();
+  return;
+ }
+
+ const currentAttackerOwner = state.territories[selectedAttackerTile].ownerId;
+
+ if (tileIdx === selectedAttackerTile) {
+  SoundFX.click();
+  selectedAttackerTile = null;
+  renderBoardScreen();
+  return;
+ }
+
+ if (clickedTile.ownerId === currentAttackerOwner) {
+  SoundFX.click();
+  selectedAttackerTile = tileIdx;
+  renderBoardScreen();
+  return;
+ }
+
+ const validTargets = getValidEnemyNeighborTilesForOwner(currentAttackerOwner);
+ if (validTargets.includes(tileIdx)) {
+  let actualAttackerTile = selectedAttackerTile;
+  if (!areTilesAdjacent(actualAttackerTile, tileIdx)) {
+   const borderingOwned = getAdjacentTiles(tileIdx).find(adj => state.territories[adj].ownerId === currentAttackerOwner);
+   if (borderingOwned !== undefined) actualAttackerTile = borderingOwned;
+  }
+  SoundFX.click();
+  openPreDuelModal(actualAttackerTile, tileIdx);
+ } else {
+  SoundFX.click();
+  selectedAttackerTile = tileIdx;
+  renderBoardScreen();
+ }
+}
+
+function triggerRandomizer() {
+ if (randomizerBusy) return;
+ const candidateTiles = state.territories.filter(t =>
+  getAdjacentTiles(t.index).some(adj => state.territories[adj].ownerId !== t.ownerId)
+ );
+ if (candidateTiles.length === 0) return;
+
+ randomizerBusy = true;
+ selectedAttackerTile = null;
+ renderBoardScreen();
+
+ const tileEls = Array.from(document.querySelectorAll(".territory-tile"));
+ let step = 0;
+ const totalSteps = 16 + Math.floor(Math.random() * 8);
+ let lastFlashed = -1;
+
+ const interval = setInterval(() => {
+  tileEls.forEach(el => el.classList.remove("randomizer-flash"));
+  let pick;
+  do {
+   pick = candidateTiles[Math.floor(Math.random() * candidateTiles.length)].index;
+  } while (candidateTiles.length > 1 && pick === lastFlashed);
+  lastFlashed = pick;
+
+  const targetEl = tileEls.find(el => parseInt(el.dataset.index, 10) === pick);
+  if (targetEl) targetEl.classList.add("randomizer-flash");
+  SoundFX.tick(false);
+
+  step++;
+  if (step >= totalSteps) {
+   clearInterval(interval);
+   randomizerBusy = false;
+   selectedAttackerTile = pick;
+   SoundFX.correct();
+   renderBoardScreen();
+  }
+ }, 85);
+}
+
+/* =========================================================================
+   PRE-DUEL & ARENA DE DUEL (TIMP INDIVIDUAL 60s PENTRU FIECARE JUCĂTOR!)
+   - Când jucătorul activ răspunde CORECT: timpul lui îngheață pe loc și se trece la celălalt jucător.
+   - Când jucătorul activ răspunde GREȘIT: rămâne tot el să dea răspunsul corect, iar timpul lui continuă să scadă!
+   ========================================================================= */
+function openPreDuelModal(attackerTileIdx, defenderTileIdx) {
+ const attackerTile = state.territories[attackerTileIdx];
+ const defenderTile = state.territories[defenderTileIdx];
+ const attacker = getPlayerById(attackerTile.ownerId);
+ const defender = getPlayerById(defenderTile.ownerId);
+
+ pendingDuel = {
+  attackerTileIdx,
+  defenderTileIdx,
+  attackerId: attacker.id,
+  defenderId: defender.id,
+  category: defenderTile.category
+ };
+
+ document.getElementById("preduel-category").textContent = `CATEGORIE DUEL: ${defenderTile.category}`;
+ document.getElementById("preduel-attacker-name").textContent = attacker.name;
+ document.getElementById("preduel-defender-name").textContent = defender.name;
+
+ document.getElementById("preduel-box-attacker").style.borderColor = PLAYER_PALETTES[attacker.colorIdx].solid;
+ document.getElementById("preduel-box-defender").style.borderColor = PLAYER_PALETTES[defender.colorIdx].solid;
+
+ document.getElementById("modal-preduel").classList.add("open");
+}
+
+function getNextQuestionForCategory(category) {
+ const usedSet = new Set(state.usedQuestionIds);
+
+ let pool = QUESTION_BANK.filter(q => q.c === category && !usedSet.has(q.id));
+
+ if (pool.length === 0) {
+  pool = QUESTION_BANK.filter(q => !usedSet.has(q.id));
+ }
+
+ if (pool.length === 0) {
+  state.usedQuestionIds = [];
+  pool = QUESTION_BANK.filter(q => q.c === category);
+ }
+
+ const chosen = pool[Math.floor(Math.random() * pool.length)];
+ state.usedQuestionIds.push(chosen.id);
+ state.questionsAnswered++;
+
+ const optionsWithCorrect = chosen.a.map((text, idx) => ({
+  text,
+  isCorrect: idx === 0
+ }));
+ const shuffledOptions = shuffleArray(optionsWithCorrect);
+
+ return {
+  id: chosen.id,
+  category: chosen.c,
+  questionText: chosen.q,
+  options: shuffledOptions
+ };
+}
+
+function startDuel() {
+ if (!pendingDuel) return;
+ document.getElementById("modal-preduel").classList.remove("open");
+
+ const attacker = getPlayerById(pendingDuel.attackerId);
+ const defender = getPlayerById(pendingDuel.defenderId);
+
+ activeDuel = {
+  ...pendingDuel,
+  combatants: [attacker, defender],
+  turnIndex: 0, // 0 = Atacator, 1 = Apărător
+  remainingMs: [DUEL_PLAYER_TIME_MS, DUEL_PLAYER_TIME_MS], // 60.0s fiecare!
+  lastSecondBeep: [60, 60],
+  lastTickTime: performance.now(),
+  pausedForTransition: false, // scurtă tranziție doar la răspuns CORECT când se schimbă jucătorul
+  wrongPenaltyLock: false, // scurtă blocare anti-dublu-clic (timpul jucătorului continuă să scadă!)
+  ended: false,
+  currentQuestion: null,
+  timerInterval: null
+ };
+
+ document.getElementById("duel-name-0").textContent = attacker.name;
+ document.getElementById("duel-name-1").textContent = defender.name;
+ document.getElementById("duel-cat-tag").textContent = `Categorie: ${activeDuel.category}`;
+ document.getElementById("duel-feedback-strip").textContent = "";
+
+ switchScreen("screen-duel");
+ SoundFX.duelStart();
+
+ updateDuelTurnUI();
+ presentNextQuestion();
+ updateDualTimersDisplay();
+
+ activeDuel.lastTickTime = performance.now();
+ activeDuel.timerInterval = setInterval(duelTick, 40);
+}
+
+function duelTick() {
+ if (!activeDuel || activeDuel.ended) return;
+ const now = performance.now();
+ const delta = now - activeDuel.lastTickTime;
+ activeDuel.lastTickTime = now;
+
+ // Timpul este oprit DOAR în mica tranziție de după un răspuns CORECT (când ceasul jucătorului s-a blocat deja)
+ if (activeDuel.pausedForTransition) return;
+
+ const idx = activeDuel.turnIndex;
+ activeDuel.remainingMs[idx] = Math.max(0, activeDuel.remainingMs[idx] - delta);
+ updateDualTimersDisplay();
+
+ const wholeSec = Math.ceil(activeDuel.remainingMs[idx] / 1000);
+ if (wholeSec < activeDuel.lastSecondBeep[idx] && wholeSec > 0) {
+  activeDuel.lastSecondBeep[idx] = wholeSec;
+  if (wholeSec <= 10) SoundFX.tick(true);
+  else if (wholeSec <= 20) SoundFX.tick(false);
+ }
+
+ if (activeDuel.remainingMs[idx] <= 0) {
+  const loser = activeDuel.combatants[idx];
+  const winnerIdx = 1 - idx;
+  const winner = activeDuel.combatants[winnerIdx];
+  const winnerSecLeft = (activeDuel.remainingMs[winnerIdx] / 1000).toFixed(1);
+  finishDuel(
+   winnerIdx,
+   `Timpul lui ${loser.name} a ajuns la 0.0s! ${winner.name} câștigă duelul cu ${winnerSecLeft}s rămase pe ceas!`
+  );
+ }
+}
+
+function updateDualTimersDisplay() {
+ if (!activeDuel) return;
+ for (let i = 0; i < 2; i++) {
+  const ms = activeDuel.remainingMs[i];
+  const sec = ms / 1000;
+  const digitsEl = document.getElementById(`timer-digits-${i}`);
+  const fillEl = document.getElementById(`timer-fill-${i}`);
+  const cardEl = document.getElementById(`duel-card-${i}`);
+
+  digitsEl.textContent = sec.toFixed(1) + "s";
+  const pct = Math.max(0, Math.min(100, (ms / DUEL_PLAYER_TIME_MS) * 100));
+  fillEl.style.width = pct + "%";
+
+  digitsEl.classList.remove("warn", "danger");
+  cardEl.classList.remove("danger-card");
+
+  if (sec <= 10) {
+   digitsEl.classList.add("danger");
+   fillEl.style.background = "var(--neon-red)";
+   if (activeDuel.turnIndex === i) cardEl.classList.add("danger-card");
+  } else if (sec <= 22) {
+   digitsEl.classList.add("warn");
+   fillEl.style.background = "var(--neon-gold)";
+  } else {
+   fillEl.style.background = "linear-gradient(90deg, var(--neon-cyan), #2979ff)";
+  }
+ }
+}
+
+function updateDuelTurnUI() {
+ if (!activeDuel) return;
+ const card0 = document.getElementById("duel-card-0");
+ const card1 = document.getElementById("duel-card-1");
+ const tag0 = document.getElementById("clock-tag-0");
+ const tag1 = document.getElementById("clock-tag-1");
+
+ const activePlayer = activeDuel.combatants[activeDuel.turnIndex];
+ const pal = PLAYER_PALETTES[activePlayer.colorIdx];
+
+ if (activeDuel.turnIndex === 0) {
+  card0.className = "duel-player-card active-turn";
+  card1.className = "duel-player-card inactive-turn";
+  card0.style.borderColor = pal.solid;
+  card1.style.borderColor = "rgba(255,255,255,0.16)";
+  tag0.textContent = "⏳ Timp Activ";
+  tag1.textContent = "⏸ Timp Blocat";
+ } else {
+  card1.className = "duel-player-card active-turn";
+  card0.className = "duel-player-card inactive-turn";
+  card1.style.borderColor = pal.solid;
+  card0.style.borderColor = "rgba(255,255,255,0.16)";
+  tag1.textContent = "⏳ Timp Activ";
+  tag0.textContent = "⏸ Timp Blocat";
+ }
+
+ const bannerName = document.getElementById("banner-player-name");
+ bannerName.textContent = activePlayer.name;
+ bannerName.style.color = pal.solid;
+ updateDualTimersDisplay();
+}
+
+function presentNextQuestion() {
+ if (!activeDuel || activeDuel.ended) return;
+ const qObj = getNextQuestionForCategory(activeDuel.category);
+ activeDuel.currentQuestion = qObj;
+
+ document.getElementById("question-text").textContent = qObj.questionText;
+ document.getElementById("duel-cat-tag").textContent = `Categorie: ${qObj.category}`;
+ document.getElementById("duel-feedback-strip").textContent = "";
+
+ const grid = document.getElementById("answers-grid");
+ grid.innerHTML = "";
+ const labels = ["1", "2", "3", "4"];
+
+ qObj.options.forEach((opt, idx) => {
+  const btn = document.createElement("button");
+  btn.className = "answer-btn";
+  btn.innerHTML = `
+   <span class="answer-key">${labels[idx]}</span>
+   <span>${escapeHtml(opt.text)}</span>
+  `;
+  btn.addEventListener("click", () => handleAnswerChoice(idx));
+  grid.appendChild(btn);
+ });
+
+ activeDuel.pausedForTransition = false;
+ activeDuel.wrongPenaltyLock = false;
+ activeDuel.lastTickTime = performance.now();
+}
+
+function handleAnswerChoice(optionIdx) {
+ if (!activeDuel || activeDuel.ended || activeDuel.pausedForTransition || activeDuel.wrongPenaltyLock) return;
+
+ const qObj = activeDuel.currentQuestion;
+ const chosenOpt = qObj.options[optionIdx];
+ const buttons = Array.from(document.querySelectorAll("#answers-grid .answer-btn"));
+ if (!buttons[optionIdx] || buttons[optionIdx].disabled) return;
+
+ const feedbackEl = document.getElementById("duel-feedback-strip");
+ const currentPlayer = activeDuel.combatants[activeDuel.turnIndex];
+
+ if (chosenOpt.isCorrect) {
+  // RĂSPUNS CORECT -> Timpul jucătorului curent îngheață imediat și se trece la adversar!
+  activeDuel.pausedForTransition = true;
+  buttons.forEach(b => { b.disabled = true; });
+  buttons[optionIdx].classList.add("correct");
+
+  const frozenSec = (activeDuel.remainingMs[activeDuel.turnIndex] / 1000).toFixed(1);
+  feedbackEl.style.color = "var(--neon-green)";
+  feedbackEl.textContent = `✔ Corect! Timpul lui ${currentPlayer.name} rămâne blocat la ${frozenSec}s — urmează adversarul!`;
+  SoundFX.correct();
+
+  setTimeout(() => {
+   if (!activeDuel || activeDuel.ended) return;
+   activeDuel.turnIndex = 1 - activeDuel.turnIndex;
+   updateDuelTurnUI();
+   presentNextQuestion();
+  }, 550);
+ } else {
+  // RĂSPUNS GREȘIT -> aceeași persoană primește automat o întrebare nouă.
+  // Ceasul jucătorului continuă să scadă; rândul nu se schimbă.
+  buttons[optionIdx].classList.add("wrong");
+  buttons.forEach(b => { b.disabled = true; });
+  SoundFX.wrong();
+
+  feedbackEl.style.color = "var(--neon-red)";
+  feedbackEl.textContent = `✖ Greșit, ${currentPlayer.name}! Urmează imediat o întrebare nouă — timpul tău continuă!`;
+
+  activeDuel.wrongPenaltyLock = true;
+  const duelRef = activeDuel;
+  setTimeout(() => {
+   if (!activeDuel || activeDuel !== duelRef || activeDuel.ended) return;
+   presentNextQuestion();
+  }, 650);
+ }
+}
+
+function finishDuel(winnerIdx, reasonText) {
+ if (!activeDuel || activeDuel.ended) return;
+ activeDuel.ended = true;
+ clearInterval(activeDuel.timerInterval);
+
+ const buttons = Array.from(document.querySelectorAll("#answers-grid .answer-btn"));
+ buttons.forEach(b => { b.disabled = true; });
+
+ SoundFX.wrong();
+
+ const winner = activeDuel.combatants[winnerIdx];
+ const loser = activeDuel.combatants[1 - winnerIdx];
+
+ if (state.conquestMode === "all") {
+  state.territories.forEach(t => {
+   if (t.ownerId === loser.id) {
+    t.ownerId = winner.id;
+   }
+  });
+ } else {
+  if (winnerIdx === 0) {
+   state.territories[activeDuel.defenderTileIdx].ownerId = winner.id;
+  } else {
+   state.territories[activeDuel.attackerTileIdx].ownerId = winner.id;
+  }
+ }
+
+ state.duelsPlayed++;
+ selectedAttackerTile = null;
+ pendingDuel = null;
+
+ const uniqueOwners = new Set(state.territories.map(t => t.ownerId));
+ const gameFinished = uniqueOwners.size === 1 || !hasAnyPossibleDuel();
+
+ if (gameFinished) {
+  const counts = {};
+  state.territories.forEach(t => { counts[t.ownerId] = (counts[t.ownerId] || 0) + 1; });
+  let topId = state.territories[0].ownerId;
+  Object.keys(counts).forEach(pid => {
+   if (counts[pid] > counts[topId]) topId = parseInt(pid, 10);
+  });
+  state.phase = "victory";
+  state.winnerName = getPlayerById(parseInt(topId, 10)).name;
+ } else {
+  state.phase = "board";
+ }
+
+ saveState();
+
+ document.getElementById("result-winner-headline").textContent = `🏆 ${winner.name} câștigă duelul!`;
+ const conquestExplanation = state.conquestMode === "all"
+  ? `${winner.name} preia toate teritoriile deținute de ${loser.name}!`
+  : `${winner.name} cucerește teritoriul disputat!`;
+ document.getElementById("result-reason-text").innerHTML = `${escapeHtml(reasonText)}<br><strong style="color:var(--neon-cyan)">${escapeHtml(conquestExplanation)}</strong>`;
+
+ const continueBtn = document.getElementById("btn-continue-board");
+ continueBtn.textContent = gameFinished ? "Vezi Campionul Final 🏆" : "Înapoi la Tabla de Joc ▶";
+ document.getElementById("modal-duel-result").classList.add("open");
+}
+
+/* =========================================================================
+   ECRAN 4: VICTORIE FINALĂ & CONFETTI CANVAS
+   ========================================================================= */
+function showVictoryScreen() {
+ SoundFX.victory();
+ const totalTiles = state.territories.length;
+ const counts = {};
+ state.territories.forEach(t => { counts[t.ownerId] = (counts[t.ownerId] || 0) + 1; });
+ const maxOwned = Math.max(...Object.values(counts));
+
+ document.getElementById("victory-winner-name").textContent = state.winnerName || "Campion";
+ document.getElementById("v-stat-territories").textContent = `${maxOwned} / ${totalTiles}`;
+ document.getElementById("v-stat-duels").textContent = state.duelsPlayed;
+ document.getElementById("v-stat-questions").textContent = state.questionsAnswered;
+
+ switchScreen("screen-victory");
+ startConfetti();
+}
+
+let confettiAnimId = null;
+function startConfetti() {
+ const canvas = document.getElementById("confetti-canvas");
+ const ctx = canvas.getContext("2d");
+ canvas.width = window.innerWidth;
+ canvas.height = window.innerHeight;
+
+ const colors = ["#00f0ff", "#ffca28", "#00e676", "#ff2a55", "#b35cff", "#ffffff"];
+ const pieces = Array.from({ length: 130 }, () => ({
+  x: Math.random() * canvas.width,
+  y: Math.random() * canvas.height - canvas.height,
+  w: 7 + Math.random() * 8,
+  h: 10 + Math.random() * 10,
+  vy: 2 + Math.random() * 3.5,
+  vx: -1.5 + Math.random() * 3,
+  rot: Math.random() * Math.PI * 2,
+  vrot: -0.08 + Math.random() * 0.16,
+  color: colors[Math.floor(Math.random() * colors.length)]
+ }));
+
+ function frame() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pieces.forEach(p => {
+   p.x += p.vx;
+   p.y += p.vy;
+   p.rot += p.vrot;
+   if (p.y > canvas.height + 20) {
+    p.y = -20;
+    p.x = Math.random() * canvas.width;
+   }
+   ctx.save();
+   ctx.translate(p.x, p.y);
+   ctx.rotate(p.rot);
+   ctx.fillStyle = p.color;
+   ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+   ctx.restore();
+  });
+  confettiAnimId = requestAnimationFrame(frame);
+ }
+ stopConfetti();
+ frame();
+}
+
+function stopConfetti() {
+ if (confettiAnimId) {
+  cancelAnimationFrame(confettiAnimId);
+  confettiAnimId = null;
+ }
+ const canvas = document.getElementById("confetti-canvas");
+ const ctx = canvas.getContext("2d");
+ if (ctx) ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function escapeHtml(str) {
+ return String(str)
+  .replace(/&/g, "&amp;")
+  .replace(/</g, "&lt;")
+  .replace(/>/g, "&gt;")
+  .replace(/"/g, "&quot;");
+}
+
+/* =========================================================================
+   RESETARE ȘI EXPORT COPIE HTML
+   ========================================================================= */
+function resetEntireGame() {
+ if (activeDuel && activeDuel.timerInterval) {
+  clearInterval(activeDuel.timerInterval);
+ }
+ activeDuel = null;
+ pendingDuel = null;
+ selectedAttackerTile = null;
+ stopConfetti();
+
+ try { localStorage.removeItem(STORAGE_KEY); } catch (_) {}
+
+ state = {
+  phase: "setup",
+  conquestMode: "all",
+  territoriesPerPlayer: 1,
+  gridCols: 5,
+  gridRows: 2,
+  players: [],
+  territories: [],
+  usedQuestionIds: [],
+  duelsPlayed: 0,
+  questionsAnswered: 0,
+  winnerName: null
+ };
+
+ document.getElementById("modal-preduel").classList.remove("open");
+ document.getElementById("modal-duel-result").classList.remove("open");
+ document.getElementById("modal-confirm-reset").classList.remove("open");
+
+ renderSetupInputs();
+ switchScreen("screen-setup");
+ showToast("Jocul a fost resetat complet.");
+}
+
+function downloadSelfHtml() {
+ const clone = document.documentElement.cloneNode(true);
+ clone.querySelectorAll(".modal-backdrop").forEach(m => m.classList.remove("open"));
+ clone.querySelectorAll(".screen").forEach(s => s.classList.remove("active"));
+ const setupScr = clone.querySelector("#screen-setup");
+ if (setupScr) setupScr.classList.add("active");
+ const toastEl = clone.querySelector("#toast-msg");
+ if (toastEl) toastEl.classList.remove("show");
+
+ const htmlContent = "<!DOCTYPE html>\n" + clone.outerHTML;
+ const blob = new Blob([htmlContent], { type: "text/html;charset=utf-8" });
+ const url = URL.createObjectURL(blob);
+ const a = document.createElement("a");
+ a.href = url;
+ a.download = "the_floor_home_edition.html";
+ document.body.appendChild(a);
+ a.click();
+ document.body.removeChild(a);
+ URL.revokeObjectURL(url);
+ showToast("Fișierul the_floor_home_edition.html a fost descărcat!");
+}
+
+/* =========================================================================
+   INIȚIALIZARE ȘI EVENIMENTE (MOUSE + TASTATURĂ)
+   ========================================================================= */
+document.addEventListener("DOMContentLoaded", () => {
+ document.getElementById("btn-player-minus").addEventListener("click", () => changePlayerCount(-1));
+ document.getElementById("btn-player-plus").addEventListener("click", () => changePlayerCount(1));
+ document.getElementById("territories-per-player-select").addEventListener("change", () => {
+  SoundFX.click();
+  renderSetupInputs();
+ });
+
+ document.getElementById("btn-autofill-names").addEventListener("click", autofillDemoNames);
+ document.getElementById("btn-start-game").addEventListener("click", startNewGameFromSetup);
+
+ document.getElementById("btn-sound").addEventListener("click", () => {
+  SoundFX.enabled = !SoundFX.enabled;
+  document.getElementById("btn-sound").textContent = SoundFX.enabled ? "🔊 Sunet: ON" : "🔇 Sunet: OFF";
+  if (SoundFX.enabled) SoundFX.click();
+ });
+
+ document.getElementById("btn-download-html").addEventListener("click", downloadSelfHtml);
+
+ document.getElementById("btn-reset-game").addEventListener("click", () => {
+  SoundFX.click();
+  document.getElementById("modal-confirm-reset").classList.add("open");
+ });
+ document.getElementById("btn-cancel-reset").addEventListener("click", () => {
+  document.getElementById("modal-confirm-reset").classList.remove("open");
+ });
+ document.getElementById("btn-confirm-reset-yes").addEventListener("click", resetEntireGame);
+
+ document.getElementById("btn-clear-selection").addEventListener("click", () => {
+  SoundFX.click();
+  selectedAttackerTile = null;
+  renderBoardScreen();
+ });
+ document.getElementById("btn-randomizer").addEventListener("click", triggerRandomizer);
+
+ document.getElementById("btn-cancel-duel").addEventListener("click", () => {
+  SoundFX.click();
+  pendingDuel = null;
+  document.getElementById("modal-preduel").classList.remove("open");
+ });
+ document.getElementById("btn-launch-duel").addEventListener("click", startDuel);
+
+ document.getElementById("btn-continue-board").addEventListener("click", () => {
+  SoundFX.click();
+  document.getElementById("modal-duel-result").classList.remove("open");
+  activeDuel = null;
+  if (state.phase === "victory") {
+   showVictoryScreen();
+  } else {
+   renderBoardScreen();
+   switchScreen("screen-board");
+  }
+ });
+
+ document.getElementById("btn-new-match").addEventListener("click", resetEntireGame);
+
+ window.addEventListener("keydown", (e) => {
+  if (activeDuel && !activeDuel.ended && !activeDuel.pausedForTransition && !activeDuel.wrongPenaltyLock) {
+   if (["1", "2", "3", "4"].includes(e.key)) {
+    e.preventDefault();
+    handleAnswerChoice(parseInt(e.key, 10) - 1);
+   }
+  }
+ });
+
+ window.addEventListener("resize", () => {
+  const canvas = document.getElementById("confetti-canvas");
+  if (canvas && confettiAnimId) {
+   canvas.width = window.innerWidth;
+   canvas.height = window.innerHeight;
+  }
+ });
+
+ renderSetupInputs();
+
+ if (loadState() && state.phase !== "setup") {
+  if (state.phase === "victory") {
+   showVictoryScreen();
+  } else {
+   renderBoardScreen();
+   switchScreen("screen-board");
+   showToast("💾 Partida anterioară a fost restaurată automat!");
+  }
+ }
+});
+</script>
+
+<script>
+(() => {
+ const socket = io();
+ let mpRole = null, mpCode = null, lastSnapshotKey = '';
+ const $ = id => document.getElementById(id);
+ const entry = $('mp-entry'), wait = $('mp-wait'), hostbar = $('mp-hostbar');
+ function error(msg){ $('mp-error').textContent = msg || ''; }
+ function setRole(role, code){ mpRole=role; mpCode=code; entry.style.display='none'; if(role==='host'){hostbar.style.display='block';$('mp-room-code').textContent=code;} else {document.body.classList.add('mp-guest');wait.style.display='block';} }
+ function screenId(){ return document.querySelector('.screen.active')?.id || 'screen-setup'; }
+ function snapshot(){
+  if(mpRole!=='host') return;
+  const duel = activeDuel ? {...activeDuel, timerInterval:null, lastTickTime:0, currentQuestion: activeDuel.currentQuestion ? {...activeDuel.currentQuestion, options:activeDuel.currentQuestion.options.map(o=>({text:o.text}))} : null} : null;
+  const snap={state, selectedAttackerTile, pendingDuel, activeDuel:duel, screen:screenId(), preduel:$('modal-preduel').classList.contains('open'), result:$('modal-duel-result').classList.contains('open'), reset:$('modal-confirm-reset').classList.contains('open'), resultHeadline:$('result-winner-headline').textContent, resultReason:$('result-reason-text').innerHTML, continueText:$('btn-continue-board').textContent};
+  socket.emit('game:snapshot',snap);
+ }
+ const oldSaveState=saveState;
+ saveState=function(){ oldSaveState(); snapshot(); };
+ function renderGuestDuel(d){
+  if(!d) return;
+  activeDuel=d; activeDuel.timerInterval=null;
+  const combatants=d.combatants || [];
+  combatants.forEach((p,i)=>{ if(p) $('duel-name-'+i).textContent=p.name; });
+  $('duel-cat-tag').textContent='Categorie: '+d.category;
+  $('question-text').textContent=d.currentQuestion?.questionText || 'Așteaptă următoarea întrebare…';
+  $('duel-feedback-strip').textContent='Gazda controlează duelul';
+  updateDuelTurnUI();
+  updateDualTimersDisplay();
+  const grid=$('answers-grid'); grid.innerHTML='';
+  (d.currentQuestion?.options || []).forEach((opt,i)=>{const b=document.createElement('button');b.className='answer-btn';b.disabled=true;b.innerHTML='<span class="answer-key">'+(i+1)+'</span><span></span>';b.querySelector('span:last-child').textContent=opt.text;grid.appendChild(b);});
+  grid.querySelectorAll('button').forEach(b=>b.disabled=true);
+ }
+ function applySnapshot(s){
+  if(mpRole!=='guest'||!s) return;
+  state=s.state; selectedAttackerTile=s.selectedAttackerTile; pendingDuel=s.pendingDuel; activeDuel=s.activeDuel;
+  if(state.phase==='setup') {wait.style.display='block';$('mp-wait').textContent='Ești conectat! Gazda pregătește partida. Tabla va apărea automat când începe jocul.';return;}
+  wait.style.display='none';
+  if(s.screen==='screen-victory'||state.phase==='victory') {showVictoryScreen();}
+  else if(s.screen==='screen-duel' && activeDuel){switchScreen('screen-duel');renderGuestDuel(activeDuel);}
+  else {renderBoardScreen();switchScreen('screen-board');}
+  $('modal-preduel').classList.toggle('open',!!s.preduel);
+  $('modal-duel-result').classList.toggle('open',!!s.result);
+  $('modal-confirm-reset').classList.toggle('open',!!s.reset);
+  if(s.result){$('result-winner-headline').textContent=s.resultHeadline||'';$('result-reason-text').innerHTML=s.resultReason||'';$('btn-continue-board').textContent=s.continueText||'Continuă';}
+ }
+ $('mp-create').addEventListener('click',()=>{error('');socket.emit('room:create',r=>{if(!r.ok)return error('Nu am putut crea camera. Încearcă din nou.');setRole('host',r.code);snapshot();});});
+ $('mp-join').addEventListener('click',()=>{error('');const code=$('mp-code').value.trim().toUpperCase();if(code.length!==5)return error('Introdu codul de 5 caractere.');socket.emit('room:join',{code,name:$('mp-name').value.trim()},r=>{if(!r.ok)return error(r.error);setRole('guest',r.code);if(r.snapshot)applySnapshot(r.snapshot);});});
+ $('mp-code').addEventListener('input',e=>e.target.value=e.target.value.toUpperCase().replace(/[^A-Z0-9]/g,'').slice(0,5));
+ $('mp-copy-link').addEventListener('click',async()=>{const url=location.origin+'/?room='+mpCode;try{await navigator.clipboard.writeText('Intră în THE FLOOR – cod: '+mpCode+' · '+url);$('mp-copy-link').textContent='Copiat!';}catch(_){prompt('Copiază invitația:',url+' (cod '+mpCode+')');}});
+ window.addEventListener('keydown',e=>{if(mpRole==='guest'){e.preventDefault();e.stopImmediatePropagation();}},true);
+ socket.on('game:snapshot',applySnapshot);
+ socket.on('room:presence',p=>{if(mpRole==='host')$('mp-count').textContent=p.players+' conectați';});
+ socket.on('room:host-disconnected',()=>{if(mpRole==='guest'){$('mp-wait').style.display='block';$('mp-wait').textContent='Conexiunea gazdei s-a întrerupt. Așteaptă reconectarea sau o nouă invitație.';}});
+ socket.on('room:closed',()=>{if(mpRole==='guest'){$('mp-wait').textContent='Camera a fost închisă de gazdă.';} });
+ // Broadcasts include duel clocks and modal transitions, even when the original game has no saveState() call.
+ setInterval(snapshot,250);
+ const params=new URLSearchParams(location.search);const invited=params.get('room');if(invited)$('mp-code').value=invited.toUpperCase();
+})();
+</script>
+
+</body>
+</html>
+```
+
+Dacă dorești ca la un răspuns greșit jucătorul activ să primească **o altă întrebare nouă** (în loc să aleagă dintre variantele rămase la aceeași întrebare), spune-mi și pot ajusta această regulă imediat!
